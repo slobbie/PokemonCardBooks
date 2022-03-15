@@ -1,14 +1,19 @@
-import React from "react";
-import Hi from "./components/test";
-import { theme } from "./styeld/theme";
-import { ThemeProvider } from "styled-components";
-import { createGlobalStyle } from "styled-components";
+import React from 'react';
+import { theme } from './styeld/theme';
+import { ThemeProvider } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
+import Home from './layout/Home';
+import Nav from './layout/Nav';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Hi />
+      <Nav />
+      <Routes>
+        <Route path='/*' element={<Home />} />
+      </Routes>
     </ThemeProvider>
   );
 }

@@ -1,6 +1,7 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+import { Data } from '../atom';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 interface IPokemoms {
@@ -16,9 +17,9 @@ interface IPokemoms {
 }
 
 const Cards = () => {
-  const [pokemons, setPokemons] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [count, setCount] = useState(9);
+  const [pokeMonsData, setPokeMonsData] = useRecoilState(Data);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [count, setCount] = useState(9);
 
   const fetchPokemons = async () => {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=100`);
@@ -47,22 +48,27 @@ const Cards = () => {
         };
       })
     );
-
-    setPokemons(pokemonItem);
-    setIsLoading(false);
+    setPokeMonsData(pokemonItem);
+    // setPokemons(pokemonItem);
+    // setIsLoading(false);
   };
   useEffect(() => {
     fetchPokemons();
   }, []);
-  console.log(pokemons);
+
   return (
     <CardBox>
-      {pokemons.map((item: IPokemoms, i) => {
+      {pokeMonsData.map((item: IPokemoms) => {
         return (
-          <Card key={i}>
-            <Name>{item.name}</Name>
-            <Img src={item.img} />
-          </Card>
+          <Link to={`/detail/${item.id}`} key={item.id}>
+            <Card>
+              <Name>
+                <p className='number'> No.{item.id}</p>
+                <p> {item.name}</p>
+              </Name>
+              <Img src={item.img} />
+            </Card>
+          </Link>
         );
       })}
     </CardBox>
@@ -94,11 +100,15 @@ const Card = styled.div`
   cursor: pointer;
 `;
 
-const Name = styled.h3`
+const Name = styled.div`
+  display: flex;
   margin-top: 20px;
   font-size: 17px;
   font-weight: bold;
   margin-bottom: auto;
+  .number {
+    margin-right: 10px;
+  }
 `;
 
 const Img = styled.img`

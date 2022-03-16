@@ -1,11 +1,21 @@
-import React from 'react';
 import { theme } from './styeld/theme';
 import { ThemeProvider } from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 import Home from './layout/Home';
 import Nav from './layout/Nav';
 import { Route, Routes } from 'react-router-dom';
-
+import Detail from './components/Detail';
+interface IPokemoms {
+  color: string;
+  genera: string;
+  height: number;
+  id: number;
+  img: string;
+  name: string;
+  text: string;
+  type: string;
+  weight: number;
+}
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -13,6 +23,7 @@ function App() {
       <Nav />
       <Routes>
         <Route path='/*' element={<Home />} />
+        <Route path='/detail/*' element={<Detail />} />
       </Routes>
     </ThemeProvider>
   );

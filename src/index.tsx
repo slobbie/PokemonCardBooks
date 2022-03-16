@@ -7,6 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { RecoilRoot } from 'recoil';
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어 생성
 
@@ -15,11 +16,13 @@ const queryClient = new QueryClient();
 
 ReactDOM.render(
   <BrowserRouter>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </Provider>
+    <RecoilRoot>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+      </Provider>
+    </RecoilRoot>
   </BrowserRouter>,
 
   document.getElementById('root')

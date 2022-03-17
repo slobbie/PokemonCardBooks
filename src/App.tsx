@@ -1,10 +1,12 @@
-import { theme } from './styeld/theme';
+import { darkTheme, lightTheme } from './styeld/theme';
 import { ThemeProvider } from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 import Home from './layout/Home';
 import Nav from './layout/Nav';
 import { Route, Routes } from 'react-router-dom';
 import Detail from './components/Detail';
+import { useRecoilValue } from 'recoil';
+import { Theme } from './atom';
 interface IPokemoms {
   color: string;
   genera: string;
@@ -17,8 +19,9 @@ interface IPokemoms {
   weight: number;
 }
 function App() {
+  const ThemeColor = useRecoilValue(Theme);
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={ThemeColor ? darkTheme : lightTheme}>
       <GlobalStyle />
       <Nav />
       <Routes>
@@ -84,7 +87,7 @@ table {
 }
 body {
   font-family: 'Source Sans Pro', sans-serif;
-   /* color: ${(props) => props.theme.white.darker} ; */
+  background-color: ${(props) => props.theme.bgColor};
  
 }
 a{

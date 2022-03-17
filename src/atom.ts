@@ -7,3 +7,8 @@ export const Data = atom({
   // 두번째로 dafault value 가 필요하다.
   default: [],
 });
+
+export const Theme = atom({
+  key: 'theme',
+  default: true,
+});

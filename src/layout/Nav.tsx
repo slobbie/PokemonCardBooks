@@ -1,12 +1,31 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { Theme } from '../atom';
 
 const Nav = () => {
+  const [toggle, setToggle] = useState(false); // Toggle switch 를 관리하는 상태
+  const setDarkAtom = useSetRecoilState(Theme);
+
+  const onToggle = () => {
+    setToggle(!toggle);
+    setDarkAtom((prev) => !prev);
+  }; // Toggle 이벤트
   return (
     <Navbar>
       <Link to='/'>
-        <Logo>LOGO</Logo>
+        <Logo>PokemonBook</Logo>
       </Link>
+      <Toggle className='toggleSwitchBox'>
+        <div className={`boxinner ${toggle ? 'swichOn' : 'switchOff'}`} />
+        <button
+          onClick={() => onToggle()}
+          className={
+            toggle ? 'buttonOn toggleButton ' : 'buttonOff toggleButton'
+          }
+        />
+      </Toggle>
     </Navbar>
   );
 };
@@ -15,11 +34,71 @@ export default Nav;
 
 const Navbar = styled.nav`
   width: 100%;
-  border: 1px solid black;
-  height: 50px;
+  height: 100px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-const Logo = styled.section`
+const Logo = styled.div`
   cursor: pointer;
+
+  font-family: 'Press Start 2P', cursive;
+  font-size: 40px;
+  color: ${(props) => props.theme.textColor};
+`;
+
+const Toggle = styled.div`
+  width: 60px;
+  height: 20px;
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #c5c5c5;
+  position: absolute;
+  right: 30px;
+  .boxinner {
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    left: -100px;
+  }
+
+  .toggleButton {
+    width: 15px;
+    height: 15px;
+    display: block;
+    border: none;
+    border-radius: 15px;
+    position: relative;
+    cursor: pointer;
+    top: -25px;
+    margin: 7px;
+    z-index: 5;
+    right: 5px;
+  }
+  .swichOn {
+    transform: translateX(100px);
+    transition: 1.1s;
+    position: relative;
+    background-color: blue;
+    z-index: 2;
+  }
+
+  .switchOff {
+    transform: translateX(-100px);
+    transition: 2.3s;
+    position: relative;
+    z-index: 2;
+    background-color: orange;
+  }
+  .buttonOn {
+    transform: translateX(40px);
+    transition: 1s;
+  }
+
+  .buttonOff {
+    transition: 1s;
+  }
 `;

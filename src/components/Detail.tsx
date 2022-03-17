@@ -22,16 +22,24 @@ const Detail = () => {
     Navigate(`/`);
   };
   const matchId = useMatch('/detail/:id');
-  const data = useRecoilValue(Data);
-  const [detail, setDatail] = useState();
+  const data: any = useRecoilValue(Data);
+  // const [detail, setDatail] = useState();
 
   const clickedMovie =
     matchId?.params.id &&
     data?.find((item: any) => item.id + '' === matchId.params.id);
+
   console.log(clickedMovie);
+
   return (
     <DetailSection>
-      <DetailBox></DetailBox>
+      <DetailBox>
+        {clickedMovie && (
+          <>
+            <h3>{clickedMovie?.name}</h3>
+          </>
+        )}
+      </DetailBox>
       <button onClick={onClick}>뒤로가기</button>
     </DetailSection>
   );

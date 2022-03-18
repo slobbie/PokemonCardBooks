@@ -8,6 +8,21 @@ export const Data = atom({
   default: [],
 });
 
+export const SearchData = atom({
+  key: 'SearchData',
+  default: [],
+});
+
+export const Toggle = atom({
+  key: 'Toggle',
+  default: false,
+});
+
+export const ToggleData = atom({
+  key: 'Toggle',
+  default: [],
+});
+
 export const Theme = atom({
   key: 'theme',
   default: true,

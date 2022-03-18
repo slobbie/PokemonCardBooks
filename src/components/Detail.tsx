@@ -15,8 +15,6 @@ const Detail = () => {
     matchId?.params.id &&
     data?.find((item: any) => item.id + '' === matchId.params.id);
 
-  console.log(clickedMovie);
-
   return (
     <DetailSection>
       <MiniImgBox>

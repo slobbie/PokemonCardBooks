@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Data } from '../atom';
-import { useRecoilState } from 'recoil';
+import { Data, SearchData } from '../atom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import PokeBall from '../assets/pokeball.svg';
 
@@ -17,88 +16,41 @@ interface IPokemoms {
   weight: number;
 }
 
-const Cards = () => {
-  const [pokeMonsData, setPokeMonsData] = useRecoilState(Data);
-  const [isLoading, setIsLoading] = useState(true);
-  const [count, setCount] = useState(9);
-
-  const fetchPokemons = async (count: number) => {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${count}`);
-    const json = await res.json();
-    const { results } = json;
-
-    const pokemonItem: any = await Promise.all(
-      results.map(async ({ url }: any) => {
-        const pokemonRes = await fetch(url);
-        const pokemonJson = await pokemonRes.json();
-        const detailUrl = pokemonJson.species.url;
-        console.log(pokemonJson);
-        const detailRes = await fetch(detailUrl);
-        const detailJson = await detailRes.json();
-        console.log(pokemonJson);
-        return {
-          id: pokemonJson.id,
-          name: detailJson.names[2].name,
-          img: pokemonJson.sprites.other['official-artwork'].front_default,
-          front_img: pokemonJson.sprites.front_default,
-          back_img: pokemonJson.sprites.back_default,
-          type: pokemonJson.types[0].type.name,
-          color: detailJson.color.name,
-          text: detailJson.flavor_text_entries[23].flavor_text,
-          genera: detailJson.genera[1].genus,
-          height: pokemonJson.height,
-          weight: pokemonJson.weight,
-        };
-      })
-    );
-    setPokeMonsData(pokemonItem);
-    // setPokemons(pokemonItem);
-    setIsLoading(false);
-  };
-  const loadMore = () => {
-    setCount((prev) => prev + 9);
-  };
-  useEffect(() => {
-    fetchPokemons(count);
-  }, [count]);
-
-  const scrollEnd = useRef<any>();
-  useEffect(() => {
-    if (!isLoading) {
-      const observer = new IntersectionObserver(
-        (entrise) => {
-          if (entrise[0].isIntersecting) {
-            loadMore();
-          }
-        },
-        { threshold: 0.2 }
-      );
-      observer.observe(scrollEnd.current);
-    }
-  }, [isLoading]);
-
+const Cards = ({ scrollEnd, ToggleData }: any) => {
+  const data: any = useRecoilValue(Data);
+  const SeachData: any = useRecoilValue(SearchData);
   return (
     <CardBox>
-      {isLoading ? (
-        <p>loading...</p>
-      ) : (
-        <>
-          {pokeMonsData.map((item: IPokemoms) => {
-            return (
-              <Link to={`/detail/${item.id}`} key={item.id}>
-                <Card color={item.color}>
-                  <Name>
-                    <img className='ball' src={PokeBall} alt='포켓볼사진' />
-                    <p className='number'> No.{item.id}</p>
-                  </Name>
-                  <Img src={item.img} />
-                  <p className='name'> {item.name}</p>
-                </Card>
-              </Link>
-            );
-          })}
-        </>
-      )}
+      <>
+        {SeachData.map((item: IPokemoms) => {
+          return (
+            <Link to={`/detail/${item.id}`} key={item.id}>
+              <Card color={item.color}>
+                <Name>
+                  <img className='ball' src={PokeBall} alt='포켓볼사진' />
+                  <p className='number'> No.{item.id}</p>
+                </Name>
+                <Img src={item.img} />
+                <p className='name'> {item.name}</p>
+              </Card>
+            </Link>
+          );
+        })}
+        {data.map((item: IPokemoms) => {
+          return (
+            <Link to={`/detail/${item.id}`} key={item.id}>
+              <Card color={item.color}>
+                <Name>
+                  <img className='ball' src={PokeBall} alt='포켓볼사진' />
+                  <p className='number'> No.{item.id}</p>
+                </Name>
+                <Img src={item.img} />
+                <p className='name'> {item.name}</p>
+              </Card>
+            </Link>
+          );
+        })}
+      </>
       <div ref={scrollEnd}></div>
     </CardBox>
   );

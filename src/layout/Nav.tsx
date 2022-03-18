@@ -50,14 +50,14 @@ const Logo = styled.div`
 `;
 
 const Toggle = styled.div`
-  width: 60px;
+  width: 45px;
   height: 20px;
   border: none;
   border-radius: 20px;
   overflow: hidden;
   background-color: #c5c5c5;
   position: absolute;
-  right: 30px;
+  right: 4%;
   .boxinner {
     height: 100%;
     width: 100%;
@@ -94,7 +94,7 @@ const Toggle = styled.div`
     background-color: orange;
   }
   .buttonOn {
-    transform: translateX(40px);
+    transform: translateX(23px);
     transition: 1s;
   }
 

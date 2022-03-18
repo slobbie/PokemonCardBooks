@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Data } from '../atom';
 import { useRecoilState } from 'recoil';
@@ -19,11 +19,11 @@ interface IPokemoms {
 
 const Cards = () => {
   const [pokeMonsData, setPokeMonsData] = useRecoilState(Data);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [count, setCount] = useState(9);
+  const [isLoading, setIsLoading] = useState(true);
+  const [count, setCount] = useState(9);
 
-  const fetchPokemons = async () => {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=100`);
+  const fetchPokemons = async (count: number) => {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${count}`);
     const json = await res.json();
     const { results } = json;
 
@@ -51,28 +51,53 @@ const Cards = () => {
     );
     setPokeMonsData(pokemonItem);
     // setPokemons(pokemonItem);
-    // setIsLoading(false);
+    setIsLoading(false);
+  };
+  const loadMore = () => {
+    setCount((prev) => prev + 9);
   };
   useEffect(() => {
-    fetchPokemons();
-  }, []);
+    fetchPokemons(count);
+  }, [count]);
+
+  const scrollEnd = useRef<any>();
+  useEffect(() => {
+    if (!isLoading) {
+      const observer = new IntersectionObserver(
+        (entrise) => {
+          if (entrise[0].isIntersecting) {
+            loadMore();
+          }
+        },
+        { threshold: 0.2 }
+      );
+      observer.observe(scrollEnd.current);
+    }
+  }, [isLoading]);
 
   return (
     <CardBox>
-      {pokeMonsData.map((item: IPokemoms) => {
-        return (
-          <Link to={`/detail/${item.id}`} key={item.id}>
-            <Card color={item.color}>
-              <Name>
-                <img className='ball' src={PokeBall} alt='포켓볼사진' />
-                <p className='number'> No.{item.id}</p>
-              </Name>
-              <Img src={item.img} />
-              <p className='name'> {item.name}</p>
-            </Card>
-          </Link>
-        );
-      })}
+      {isLoading ? (
+        <p>loading...</p>
+      ) : (
+        <>
+          {pokeMonsData.map((item: IPokemoms) => {
+            return (
+              <Link to={`/detail/${item.id}`} key={item.id}>
+                <Card color={item.color}>
+                  <Name>
+                    <img className='ball' src={PokeBall} alt='포켓볼사진' />
+                    <p className='number'> No.{item.id}</p>
+                  </Name>
+                  <Img src={item.img} />
+                  <p className='name'> {item.name}</p>
+                </Card>
+              </Link>
+            );
+          })}
+        </>
+      )}
+      <div ref={scrollEnd}>123</div>
     </CardBox>
   );
 };

@@ -32,7 +32,7 @@ const Cards = () => {
         const pokemonRes = await fetch(url);
         const pokemonJson = await pokemonRes.json();
         const detailUrl = pokemonJson.species.url;
-
+        console.log(pokemonJson);
         const detailRes = await fetch(detailUrl);
         const detailJson = await detailRes.json();
         console.log(pokemonJson);
@@ -40,6 +40,8 @@ const Cards = () => {
           id: pokemonJson.id,
           name: detailJson.names[2].name,
           img: pokemonJson.sprites.other['official-artwork'].front_default,
+          front_img: pokemonJson.sprites.front_default,
+          back_img: pokemonJson.sprites.back_default,
           type: pokemonJson.types[0].type.name,
           color: detailJson.color.name,
           text: detailJson.flavor_text_entries[23].flavor_text,
@@ -97,7 +99,7 @@ const Cards = () => {
           })}
         </>
       )}
-      <div ref={scrollEnd}>123</div>
+      <div ref={scrollEnd}></div>
     </CardBox>
   );
 };
@@ -116,18 +118,18 @@ const CardBox = styled.div`
 `;
 
 const Card = styled.div`
-  width: 240px;
-  height: 240px;
+  width: 200px;
+  height: 200px;
   margin-bottom: 20px;
   border: 1px solid black;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  border-radius: 150px;
+  border-radius: 20px;
   border: none;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
-  background-color: ${(props) => props.color};
+  background-color: #fff;
   cursor: pointer;
   .number {
     margin-right: 10px;
@@ -158,8 +160,8 @@ const Name = styled.div`
 `;
 
 const Img = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   position: relative;
   bottom: 35px;
 

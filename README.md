@@ -1,9 +1,25 @@
+## PokemonCardBooks
+
+[배포 링크](https://slobbie.github.io/PokemonCardBooks/)
+
+
+
+
+### 주요 기능
+
+1.Pokemon API 를 이용하여 list 만들기
+2.Infinite scroll 기능 구현
+3.router 를 이용한 Detail 페이지
+4.Recoil를 이용한 상태관리
+
+
+
 ### Getting Started
 
 1. `clone` the repository,
 
 ```
-
+https://github.com/slobbie/PokemonCardBooks.git
 ```
 
 2. `add` dependencies,

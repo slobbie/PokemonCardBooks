@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.js": "/PokemonCardBooks/static/js/main.6c435f97.js",
+    "index.html": "/PokemonCardBooks/index.html",
+    "static/media/pokeball.svg": "/PokemonCardBooks/static/media/pokeball.5a279cb63c79df238278cb85fd19378c.svg",
+    "main.6c435f97.js.map": "/PokemonCardBooks/static/js/main.6c435f97.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.6c435f97.js"
+  ]
+}

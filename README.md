@@ -53,7 +53,7 @@ Intersection Observer API를 활용해서 무한 스크롤을 구현했습니다
 ### 📎 router 를 이용한 Detail 페이지
 
 Data 에서 받아온 Id 를 링크로 보내주고,
-Detail 컴포넌트에서 useMatch hook 을 이용하여 주고값을 받아온후
+Detail 컴포넌트에서 useMatch hook 을 이용하여 값을 받아온후
 Data에서 Data Id 와 useMatch 의 값이 일치하는 데이터를 찾아 그 데이터가 존재할시에 데이터를 뿌려주는 방식을 사용했습니다.
 
 ⚙️개선점: 현재의 방식은 새로 고침 할시에 데이터가 날아가버리는 문제점이 있습니다. 매치 시켜 받은 데이터를 캐싱하도록 수정 예정입니다.

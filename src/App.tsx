@@ -7,17 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import Detail from './components/Detail';
 import { useRecoilValue } from 'recoil';
 import { Theme } from './atom';
-interface IPokemoms {
-  color: string;
-  genera: string;
-  height: number;
-  id: number;
-  img: string;
-  name: string;
-  text: string;
-  type: string;
-  weight: number;
-}
+
 function App() {
   const ThemeColor = useRecoilValue(Theme);
   return (

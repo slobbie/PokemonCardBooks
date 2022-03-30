@@ -11,33 +11,33 @@ const Detail = () => {
   const matchId = useMatch('/detail/:id');
   const data: any = useRecoilValue(Data);
 
-  const clickedMovie =
+  const clickedData =
     matchId?.params.id &&
     data?.find((item: any) => item.id + '' === matchId.params.id);
 
   return (
     <DetailSection>
       <MiniImgBox>
-        <MiniImg className='miniImg front' src={clickedMovie?.front_img} />
-        <MiniImg className='miniImg back' src={clickedMovie?.back_img} />
+        <MiniImg className='miniImg front' src={clickedData?.front_img} />
+        <MiniImg className='miniImg back' src={clickedData?.back_img} />
       </MiniImgBox>
       <DetailBox>
-        {clickedMovie && (
+        {clickedData && (
           <>
             <Top>
-              <Circle className='Circle' color={clickedMovie.color} />
-              <h3 className='number'>No.{clickedMovie?.id}</h3>
-              <p className='Type'>Type : {clickedMovie?.type}</p>
+              <Circle className='Circle' color={clickedData.color} />
+              <h3 className='number'>No.{clickedData?.id}</h3>
+              <p className='Type'>Type : {clickedData?.type}</p>
             </Top>
 
-            <ImgBox color={clickedMovie.color}>
-              <Img src={clickedMovie.img} />
+            <ImgBox color={clickedData.color}>
+              <Img src={clickedData.img} />
             </ImgBox>
 
             <TextBox>
-              <p className='name'>{clickedMovie?.name}</p>
-              <p className='pokemonType'>{clickedMovie?.genera}</p>
-              <p>{clickedMovie?.text}</p>
+              <p className='name'>{clickedData?.name}</p>
+              <p className='pokemonType'>{clickedData?.genera}</p>
+              <p>{clickedData?.text}</p>
             </TextBox>
           </>
         )}

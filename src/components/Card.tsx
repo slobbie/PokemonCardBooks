@@ -59,6 +59,7 @@ const Cards = ({ scrollEnd, ToggleData }: any) => {
 export default Cards;
 
 const CardBox = styled.div`
+  max-width: 50%;
   width: 50%;
   display: flex;
   flex-direction: row;

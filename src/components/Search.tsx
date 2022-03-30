@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { SearchData, Data } from '../atom';
 import styled from 'styled-components';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const Search = () => {
   const [searchData, setSearchData] = useRecoilState(SearchData);
@@ -11,7 +11,7 @@ const Search = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  const onSearch = (e: any) => {
+  const onSearch = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     const searchData = data.filter(({ name }: any) => name === search.value);
     if (searchData) {

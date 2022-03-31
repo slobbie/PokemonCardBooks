@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { Data } from '../atom';
 import Cards from '../components/Card';
+import Filter from '../components/layout/filter';
 import MarginBottom from '../components/layout/margin-bottom copy';
 import Search from '../components/Search';
 
@@ -67,6 +68,8 @@ const Home = () => {
 
   return (
     <Section>
+      <Filter />
+      <MarginBottom margin={20} />
       <Search />
       <MarginBottom margin={50} />
       <Cards scrollEnd={scrollEnd} />
@@ -77,6 +80,8 @@ const Home = () => {
 export default Home;
 
 const Section = styled.section`
+  max-width: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin: 0 auto;

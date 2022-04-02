@@ -1,5 +1,5 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { SearchData, Data } from '../atom';
+import { SearchData, Data, Toggle } from '../atom';
 import styled from 'styled-components';
 import React, { useState } from 'react';
 
@@ -8,6 +8,7 @@ const Search = () => {
   const [count, setCount] = useState(9);
   const data: any = useRecoilValue(Data);
   const search: any = document.getElementById('search');
+  const [toggleValue, setToggleValue] = useRecoilState(Toggle);
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -16,6 +17,7 @@ const Search = () => {
     const searchData = data.filter(({ name }: any) => name === search.value);
     if (searchData) {
       setSearchData(searchData);
+      setToggleValue(true);
     }
     if (searchData.length === 0) {
       alert('항목없음');
@@ -33,6 +35,10 @@ const Search = () => {
       setCount(9);
     }
   };
+
+  const onReset = (e: React.MouseEvent<HTMLElement>) => {
+    setToggleValue(false);
+  };
   return (
     <>
       <SearchBar>
@@ -43,7 +49,8 @@ const Search = () => {
           id='search'
           type='text'
         />
-        <Btn onClick={onSearch}>검색</Btn>
+        <Btn onClick={onSearch}>search</Btn>
+        <Btn onClick={onReset}>Reset</Btn>
       </SearchBar>
     </>
   );
@@ -64,4 +71,5 @@ const Input = styled.input`
 const Btn = styled.button`
   margin-left: 20px;
   width: 100px;
+  font-family: 'Press Start 2P', cursive;
 `;

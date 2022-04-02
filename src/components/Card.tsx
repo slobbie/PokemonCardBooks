@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Data, SearchData } from '../atom';
+import { Data, SearchData, Toggle } from '../atom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import PokeBall from '../assets/pokeball.svg';
@@ -19,38 +19,45 @@ interface IPokemoms {
 const Cards = ({ scrollEnd, ToggleData }: any) => {
   const data: any = useRecoilValue(Data);
   const SeachData: any = useRecoilValue(SearchData);
+  const ToggleValue = useRecoilValue(Toggle);
+  console.log(ToggleValue);
   return (
     <CardBox>
-      <>
-        {SeachData.map((item: IPokemoms) => {
-          return (
-            <Link to={`/detail/${item.id}`} key={item.id}>
-              <Card color={item.color}>
-                <Name>
-                  <img className='ball' src={PokeBall} alt='포켓볼사진' />
-                  <p className='number'> No.{item.id}</p>
-                </Name>
-                <Img src={item.img} />
-                <p className='name'> {item.name}</p>
-              </Card>
-            </Link>
-          );
-        })}
-        {data.map((item: IPokemoms) => {
-          return (
-            <Link to={`/detail/${item.id}`} key={item.id}>
-              <Card color={item.color}>
-                <Name>
-                  <img className='ball' src={PokeBall} alt='포켓볼사진' />
-                  <p className='number'> No.{item.id}</p>
-                </Name>
-                <Img src={item.img} />
-                <p className='name'> {item.name}</p>
-              </Card>
-            </Link>
-          );
-        })}
-      </>
+      {ToggleValue ? (
+        <>
+          {SeachData.map((item: IPokemoms) => {
+            return (
+              <Link to={`/detail/${item.id}`} key={item.id}>
+                <Card color={item.color}>
+                  <Name>
+                    <img className='ball' src={PokeBall} alt='포켓볼사진' />
+                    <p className='number'> No.{item.id}</p>
+                  </Name>
+                  <Img src={item.img} />
+                  <p className='name'> {item.name}</p>
+                </Card>
+              </Link>
+            );
+          })}
+        </>
+      ) : (
+        <>
+          {data.map((item: IPokemoms) => {
+            return (
+              <Link to={`/detail/${item.id}`} key={item.id}>
+                <Card color={item.color}>
+                  <Name>
+                    <img className='ball' src={PokeBall} alt='포켓볼사진' />
+                    <p className='number'> No.{item.id}</p>
+                  </Name>
+                  <Img src={item.img} />
+                  <p className='name'> {item.name}</p>
+                </Card>
+              </Link>
+            );
+          })}
+        </>
+      )}
       <div ref={scrollEnd}></div>
     </CardBox>
   );

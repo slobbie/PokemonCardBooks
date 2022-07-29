@@ -69,6 +69,8 @@ const Home = () => {
 
   return (
     <Section>
+      <Filter />
+      <MarginBottom margin={20} />
       <Search />
       <Filter />
       <MarginBottom margin={50} />
@@ -80,6 +82,8 @@ const Home = () => {
 export default Home;
 
 const Section = styled.section`
+  max-width: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin: 0 auto;

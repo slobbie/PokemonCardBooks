@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { Data } from '../atom';
 import Cards from '../components/Card';
+import Filter from '../components/layout/Filter';
 import MarginBottom from '../components/layout/margin-bottom copy';
 import Search from '../components/Search';
 
@@ -10,7 +11,7 @@ const Home = () => {
   const [pokeMonsData, setPokeMonsData] = useRecoilState(Data);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [count, setCount] = useState(9);
+  const [count, setCount] = useState(100);
 
   const fetchPokemons = async (count: number) => {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${count}`);
@@ -42,6 +43,7 @@ const Home = () => {
     setPokeMonsData(pokemonItem);
     setIsLoading(false);
   };
+
   const loadMore = () => {
     setCount((prev) => prev + 9);
   };
@@ -68,6 +70,7 @@ const Home = () => {
   return (
     <Section>
       <Search />
+      <Filter />
       <MarginBottom margin={50} />
       <Cards scrollEnd={scrollEnd} />
     </Section>

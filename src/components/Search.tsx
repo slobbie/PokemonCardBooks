@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 const Search = () => {
   const [searchData, setSearchData] = useRecoilState(SearchData);
-  const [count, setCount] = useState(9);
+
   const data: any = useRecoilValue(Data);
   const search: any = document.getElementById('search');
   const [toggleValue, setToggleValue] = useRecoilState(Toggle);
@@ -31,14 +31,12 @@ const Search = () => {
   };
   const handlePokemonReset = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-    if (searchTerm === '') {
-      setCount(9);
-    }
   };
 
   const onReset = (e: React.MouseEvent<HTMLElement>) => {
     setToggleValue(false);
   };
+
   return (
     <>
       <SearchBar>
@@ -66,10 +64,13 @@ const SearchBar = styled.div`
 const Input = styled.input`
   width: 100%;
   height: 50px;
+  border: none;
 `;
 
 const Btn = styled.button`
   margin-left: 20px;
   width: 100px;
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Press Start 2P';
+  border: none;
+  color: #000;
 `;

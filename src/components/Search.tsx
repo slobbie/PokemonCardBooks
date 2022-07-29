@@ -47,8 +47,10 @@ const Search = () => {
           id='search'
           type='text'
         />
-        <Btn onClick={onSearch}>search</Btn>
-        <Btn onClick={onReset}>Reset</Btn>
+        <BtnBox>
+          <Btn onClick={onSearch}>search</Btn>
+          <Btn onClick={onReset}>Reset</Btn>
+        </BtnBox>
       </SearchBar>
     </>
   );
@@ -59,12 +61,18 @@ export default Search;
 const SearchBar = styled.div`
   width: 45%;
   display: flex;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    width: 80%;
+  }
 `;
 
 const Input = styled.input`
   width: 100%;
   height: 50px;
   border: none;
+  border-radius: 15px;
 `;
 
 const Btn = styled.button`
@@ -73,4 +81,12 @@ const Btn = styled.button`
   font-family: 'Press Start 2P';
   border: none;
   color: #000;
+  border-radius: 15px;
+`;
+
+const BtnBox = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 30px;
 `;

@@ -27,8 +27,6 @@ const Cards = ({ scrollEnd, ToggleData }: any) => {
 
   const FilterData = data.filter((type: IPokemoms) => type.type === FilterType);
 
-  console.log(path);
-
   return (
     <>
       <CardBox>
@@ -131,21 +129,6 @@ const Cards = ({ scrollEnd, ToggleData }: any) => {
             ) : null}
           </>
         ) : null}
-        {/* {data.map((item: IPokemoms) => {
-          return (
-            <Link to={`/detail/${item.id}`} key={item.id}>
-              <Card color={item.color}>
-                <Name>
-                  <img className='ball' src={PokeBall} alt='포켓볼사진' />
-                  <p className='number'> No.{item.id}</p>
-                </Name>
-                <Img src={item.img} />
-                <p className='name'> {item.name}</p>
-              </Card>
-            </Link>
-          );
-        })} */}
-
         <div ref={scrollEnd}></div>
       </CardBox>
       <Loader>

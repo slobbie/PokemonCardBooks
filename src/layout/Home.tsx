@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { Data } from '../atom';
 import Cards from '../components/Card';
-import Filter from '../components/layout/Filter';
+import Filter from '../components/filter';
 import MarginBottom from '../components/layout/margin-bottom copy';
 import Search from '../components/Search';
 
@@ -69,7 +69,7 @@ const Home = () => {
 
   return (
     <Section>
-      <Filter />
+      {/* <Filter /> */}
       <MarginBottom margin={20} />
       <Search />
       <Filter />

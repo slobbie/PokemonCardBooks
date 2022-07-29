@@ -44,9 +44,12 @@ const Navbar = styled.nav`
 const Logo = styled.div`
   cursor: pointer;
 
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Press Start 2P';
   font-size: 40px;
   color: ${(props) => props.theme.textColor};
+  @media screen and (max-width: 768px) {
+    font-size: 30px;
+  }
 `;
 
 const Toggle = styled.div`
@@ -100,5 +103,9 @@ const Toggle = styled.div`
 
   .buttonOff {
     transition: 1s;
+  }
+
+  @media screen and (max-width: 768px) {
+    top: 13%;
   }
 `;

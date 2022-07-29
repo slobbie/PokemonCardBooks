@@ -82,7 +82,7 @@ const Toggle = styled.div`
     transform: translateX(100px);
     transition: 1.1s;
     position: relative;
-    background-color: blue;
+    background-color: tomato;
     z-index: 2;
   }
 

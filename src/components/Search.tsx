@@ -61,7 +61,8 @@ export default Search;
 const SearchBar = styled.div`
   width: 45%;
   display: flex;
-
+  flex-direction: row;
+  align-items: center;
   @media screen and (max-width: 768px) {
     flex-direction: column;
     width: 80%;
@@ -82,11 +83,14 @@ const Btn = styled.button`
   border: none;
   color: #000;
   border-radius: 15px;
+  height: 50px;
 `;
 
 const BtnBox = styled.div`
   display: flex;
   align-items: center;
   margin: 0 auto;
-  margin-top: 30px;
+  @media screen and (max-width: 768px) {
+    margin-top: 30px;
+  }
 `;

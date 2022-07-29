@@ -106,6 +106,9 @@ const Toggle = styled.div`
   }
 
   @media screen and (max-width: 768px) {
+    top: 10%;
+  }
+  @media screen and (max-width: 425px) {
     top: 13%;
   }
 `;

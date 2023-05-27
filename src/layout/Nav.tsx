@@ -17,7 +17,7 @@ const Nav = () => {
       <Link to='/'>
         <Logo>PokemonBook</Logo>
       </Link>
-      <Toggle className='toggleSwitchBox'>
+      {/* <Toggle className='toggleSwitchBox'>
         <div className={`boxinner ${toggle ? 'swichOn' : 'switchOff'}`} />
         <button
           onClick={() => onToggle()}
@@ -25,7 +25,7 @@ const Nav = () => {
             toggle ? 'buttonOn toggleButton ' : 'buttonOff toggleButton'
           }
         />
-      </Toggle>
+      </Toggle> */}
     </Navbar>
   );
 };
@@ -33,12 +33,14 @@ const Nav = () => {
 export default Nav;
 
 const Navbar = styled.nav`
+  max-width: 1200px;
   width: 100%;
   height: 100px;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
 `;
 
 const Logo = styled.div`

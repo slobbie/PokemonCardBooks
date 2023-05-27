@@ -66,7 +66,7 @@ const Cards = ({ scrollEnd, ToggleData }: any) => {
           </>
         )}
 
-        {/* 
+        {/*
         {FilterData ? (
           <>
             {FilterData.map((item: IPokemoms) => {
@@ -187,6 +187,14 @@ const Card = styled.div<{ color: string }>`
     position: relative;
     bottom: 10px;
   }
+  @media screen and (max-width: 768px) {
+    width: 180px;
+    height: 180px;
+  }
+  @media screen and (max-width: 425px) {
+    width: 160px;
+    height: 160px;
+  }
 `;
 
 const Name = styled.div`
@@ -208,9 +216,11 @@ const Img = styled.img`
   height: 80px;
   position: relative;
   bottom: 35px;
-  transition: all 1s ease;
   &:hover {
     transform: translateY(-10px);
+  }
+  @media screen and (max-width: 768px) {
+    bottom: 10px;
   }
 `;
 

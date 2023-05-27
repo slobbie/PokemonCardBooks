@@ -82,7 +82,7 @@ const Home = () => {
 export default Home;
 
 const Section = styled.section`
-  max-width: 100%;
+  max-width: 1200px;
   width: 100%;
   display: flex;
   flex-direction: column;

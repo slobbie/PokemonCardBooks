@@ -26,20 +26,22 @@ const Filter = () => {
   const Navigate = useNavigate();
   return (
     <FilterBox>
-      <TypeBtn color='#333' onClick={() => Navigate('/')}>
-        ALL
-      </TypeBtn>
-      {types.map((type: any) => {
-        return (
-          <TypeBtn
-            key={type}
-            color={setBackgroundColor(type)}
-            onClick={() => Navigate(type)}
-          >
-            {type}
-          </TypeBtn>
-        );
-      })}
+      <ItemBox>
+        <TypeBtn color='#333' onClick={() => Navigate('/')}>
+          ALL
+        </TypeBtn>
+        {types.map((type: any) => {
+          return (
+            <TypeBtn
+              key={type}
+              color={setBackgroundColor(type)}
+              onClick={() => Navigate(type)}
+            >
+              {type}
+            </TypeBtn>
+          );
+        })}
+      </ItemBox>
     </FilterBox>
   );
 };
@@ -47,21 +49,29 @@ const Filter = () => {
 export default Filter;
 
 const FilterBox = styled.div`
+  margin-top: 30px;
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const ItemBox = styled.div`
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  max-width: 50%;
-  width: 50%;
+  grid-template-columns: repeat(8,0fr);
+  max-width: 880px;
+  width: 100%;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 30px;
+  justify-items: center;
   @media screen and (max-width: 768px) {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(6, 0fr);
   }
   @media screen and (max-width: 425px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 0fr);
   }
-`;
+`
 
 const TypeBtn = styled.button`
   outline: none;

@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { PokeMonDataInterface } from './common/interface/pokemon.interface';
 
 export const Data = atom({
   // atom 은 두가지를 요구한다.
@@ -7,6 +8,14 @@ export const Data = atom({
   // 두번째로 dafault value 가 필요하다.
   default: [],
 });
+
+
+
+export const PokeMonData = atom<PokeMonDataInterface[]>({
+  key: 'PokeMonData',
+  default: [],
+});
+
 
 export const SearchData = atom({
   key: 'SearchData',

@@ -4,18 +4,23 @@ import styled from 'styled-components';
 import React, { useState } from 'react';
 import SearchImg from '../assets/searchIcon.png'
 
+/** 검색 컴포넌트 */
 const Search = () => {
   const [searchData, setSearchData] = useRecoilState(SearchData);
 
   const data: any = useRecoilValue(Data);
-  const search: any = document.getElementById('search');
   const [toggleValue, setToggleValue] = useRecoilState(Toggle);
-
+  /** 검색 input 상태 */
   const [searchTerm, setSearchTerm] = useState('');
+
+  /** 검색 onChange event */
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
 
   const onSearch = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    const searchData = data.filter(({ name }: any) => name === search.value);
+    const searchData = data.filter(({ name }: any) => name === searchTerm);
     if (searchData) {
       setSearchData(searchData);
       setToggleValue(true);
@@ -30,19 +35,17 @@ const Search = () => {
       onSearch(e);
     }
   };
-  const handlePokemonReset = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
 
-  const onReset = (e: React.MouseEvent<HTMLElement>) => {
-    setToggleValue(false);
-  };
+
+  // const onReset = (e: React.MouseEvent<HTMLElement>) => {
+  //   setToggleValue(false);
+  // };
 
   return (
       <SearchBar>
        <Warper>
           <Input
-            onChange={handlePokemonReset}
+            onChange={onChangeSearch}
             onKeyPress={onkeyPress}
             placeholder='찾고 있는 포켓몬을 검색해 보세요'
             id='search'

@@ -1,17 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import {useEffect, useRef, useState} from 'react';
+import {useSetRecoilState} from 'recoil';
 import styled from 'styled-components';
-import { Data } from '../atom';
+import {PokeMonData } from '../atom';
 import Cards from '../components/Card';
 import Filter from '../components/filter';
 import MarginBottom from '../components/layout/margin-bottom copy';
 import Search from '../components/Search';
 
 const Home = () => {
-  const [pokeMonsData, setPokeMonsData] = useRecoilState(Data);
-
+  /** 스토어에 저장된 포켓몬 데이터 */
+  const setPokeMonData = useSetRecoilState(PokeMonData)
+  /** 로딩 상태 */
   const [isLoading, setIsLoading] = useState(true);
   const [count, setCount] = useState(100);
+
 
   const fetchPokemons = async (count: number) => {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${count}`);
@@ -40,7 +42,8 @@ const Home = () => {
         };
       })
     );
-    setPokeMonsData(pokemonItem);
+    /** 새로운 포멧몬 데이터 업데이트 */
+    setPokeMonData(pokemonItem)
     setIsLoading(false);
   };
 
@@ -69,7 +72,6 @@ const Home = () => {
 
   return (
     <Section>
-      {/* <Filter /> */}
       <MarginBottom margin={20} />
       <Search />
       <Filter />

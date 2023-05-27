@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Data, SearchData, Toggle } from '../atom';
+import { Data, PokeMonData, SearchData, Toggle } from '../atom';
 import { useRecoilValue } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 import PokeBall from '../assets/pokeball.svg';
@@ -19,20 +19,22 @@ export interface IPokemoms {
 }
 
 const Cards = ({ scrollEnd, ToggleData }: any) => {
-  const data: any = useRecoilValue(Data);
-  const SeachData: any = useRecoilValue(SearchData);
+  /** 스토어에 저장된 포켓몬 데이터 */
+  const pokeMonData = useRecoilValue(PokeMonData);
+
+  const SearchDatas: any = useRecoilValue(SearchData);
   const ToggleValue = useRecoilValue(Toggle);
   const path = useLocation();
   const FilterType = path.pathname.replace('/', '');
 
-  const FilterData = data.filter((type: IPokemoms) => type.type === FilterType);
+  const FilterData = pokeMonData.filter((type) => type.type === FilterType);
 
   return (
     <>
       <CardBox>
         {path.pathname === '/' ? (
           <>
-            {data.map((item: IPokemoms) => {
+            {pokeMonData.map((item) => {
               return (
                 <Link to={`/detail/${item.id}`} key={item.id}>
                   <Card color={item.color}>
@@ -49,7 +51,7 @@ const Cards = ({ scrollEnd, ToggleData }: any) => {
           </>
         ) : (
           <>
-            {FilterData.map((item: IPokemoms) => {
+            {FilterData.map((item) => {
               return (
                 <Link to={`/detail/${item.id}`} key={item.id}>
                   <Card color={item.color}>
@@ -66,48 +68,12 @@ const Cards = ({ scrollEnd, ToggleData }: any) => {
           </>
         )}
 
-        {/*
-        {FilterData ? (
-          <>
-            {FilterData.map((item: IPokemoms) => {
-              return (
-                <Link to={`/detail/${item.id}`} key={item.id}>
-                  <Card color={item.color}>
-                    <Name>
-                      <img className='ball' src={PokeBall} alt='포켓볼사진' />
-                      <p className='number'> No.{item.id}</p>
-                    </Name>
-                    <Img src={item.img} />
-                    <p className='name'> {item.name}</p>
-                  </Card>
-                </Link>
-              );
-            })}
-          </>
-        ) : (
-          <>
-            {data.map((item: IPokemoms) => {
-              return (
-                <Link to={`/detail/${item.id}`} key={item.id}>
-                  <Card color={item.color}>
-                    <Name>
-                      <img className='ball' src={PokeBall} alt='포켓볼사진' />
-                      <p className='number'> No.{item.id}</p>
-                    </Name>
-                    <Img src={item.img} />
-                    <p className='name'> {item.name}</p>
-                  </Card>
-                </Link>
-              );
-            })}
-          </>
-        )} */}
 
         {ToggleValue ? (
           <>
-            {SeachData ? (
+            {SearchDatas ? (
               <>
-                {SeachData.map((item: IPokemoms) => {
+                {SearchDatas.map((item: IPokemoms) => {
                   return (
                     <Link to={`/detail/${item.id}`} key={item.id}>
                       <Card color={item.color}>
@@ -158,7 +124,7 @@ const CardBox = styled.div`
   }
 `;
 
-const Card = styled.div<{ color: string }>`
+const Card = styled.div<{ color?: string }>`
   width: 200px;
   height: 200px;
   margin-bottom: 20px;

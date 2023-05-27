@@ -1,18 +1,21 @@
-import { ForwardedRef, useEffect, useRef, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import styled, { keyframes } from "styled-components";
-import { PokeMonData } from "../atom";
-import Cards from "../components/Card";
-import Filter from "../components/filter";
-import MarginBottom from "../components/layout/margin-bottom copy";
-import Search from "../components/Search";
-import { ReactComponent as Spinner } from "../assets/spinner.svg";
+import { ForwardedRef, useEffect, useRef, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import styled, { keyframes } from 'styled-components';
+import { PokeMonData } from '../atom';
+import Cards from '../components/Card';
+import Filter from '../components/filter';
+import MarginBottom from '../components/layout/margin-bottom copy';
+import Search from '../components/Search';
+import { ReactComponent as Spinner } from '../assets/spinner.svg';
+import { useLocation } from 'react-router-dom';
 
 /** 메인 홈 페이지 */
 const Home = () => {
   /** 스토어에 저장된 포켓몬 데이터 */
   const setPokeMonData = useSetRecoilState(PokeMonData);
   const pokemonData = useRecoilValue(PokeMonData);
+  const path = useLocation();
+
   /** 로딩 상태 */
   const [isLoading, setIsLoading] = useState(true);
   const [count, setCount] = useState(100);
@@ -32,7 +35,7 @@ const Home = () => {
         return {
           id: pokemonJson.id,
           name: detailJson.names[2].name,
-          img: pokemonJson.sprites.other["official-artwork"].front_default,
+          img: pokemonJson.sprites.other['official-artwork'].front_default,
           front_img: pokemonJson.sprites.front_default,
           back_img: pokemonJson.sprites.back_default,
           type: pokemonJson.types[0].type.name,
@@ -71,9 +74,12 @@ const Home = () => {
       if (scrollEnd.current) {
         observer.observe(scrollEnd.current);
       }
-      console.log("정해석", observer.observe);
     }
   }, [isLoading]);
+
+  const FilterType = path.pathname.replace('/', '');
+
+  const FilterData = pokemonData.filter((type) => type.type === FilterType);
 
   return (
     <Section>
@@ -81,12 +87,18 @@ const Home = () => {
       <MarginBottom margin={20} />
       <MarginBottom margin={50} />
       <CardBox>
-        <Cards pokeMonData={pokemonData} ref={scrollEnd} />
+        <Cards
+          pokeMonData={FilterData.length > 0 ? FilterData : pokemonData}
+          ref={scrollEnd}
+        />
       </CardBox>
       <MarginBottom margin={50} />
-      <Loader>
-        <Spinner width={50} height={50} fill="#fff" className="Loader" />
-      </Loader>
+      {isLoading ? (
+        <Loader>
+          <Spinner width={50} height={50} fill='#fff' className='Loader' />
+        </Loader>
+      ) : null}
+
       <MarginBottom margin={50} />
     </Section>
   );

@@ -1,10 +1,10 @@
-import { Link, useLocation } from "react-router-dom";
-import styled from "styled-components";
-import PokeBall from "../assets/pokeball.svg";
-import { ReactComponent as Spinner } from "../assets/spinner.svg";
-import { type } from "os";
-import { ForwardedRef, forwardRef } from "react";
-import { PokeMonDataInterface } from "../common/interface/pokemon.interface";
+import { Link, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+import PokeBall from '../assets/pokeball.svg';
+import { ReactComponent as Spinner } from '../assets/spinner.svg';
+import { type } from 'os';
+import { ForwardedRef, forwardRef } from 'react';
+import { PokeMonDataInterface } from '../common/interface/pokemon.interface';
 
 interface CardsInterface {
   pokeMonData: PokeMonDataInterface[];
@@ -19,51 +19,24 @@ const Cards = (
   // const pokeMonData = useRecoilValue(PokeMonData);
   const renderDataList = pokeMonData;
 
-  // const SearchDatas: any = useRecoilValue(SearchData);
-  // const ToggleValue = useRecoilValue(Toggle);
-  const path = useLocation();
-  const FilterType = path.pathname.replace("/", "");
-
-  const FilterData = renderDataList.filter((type) => type.type === FilterType);
-
   return (
     <>
-      {/* <CardBox> */}
-      {/* {path.pathname === '/' ? ( */}
       <>
         {renderDataList.map((item) => {
           return (
             <Link to={`/detail/${item.id}`} key={item.id}>
               <Card color={item.color}>
                 <Name>
-                  <img className="ball" src={PokeBall} alt="포켓볼사진" />
-                  <p className="number"> No.{item.id}</p>
+                  <img className='ball' src={PokeBall} alt='포켓볼사진' />
+                  <p className='number'> No.{item.id}</p>
                 </Name>
                 <Img src={item.img} />
-                <p className="name"> {item.name}</p>
+                <p className='name'> {item.name}</p>
               </Card>
             </Link>
           );
         })}
       </>
-      {/* ) : (
-          <>
-            {FilterData.map((item) => {
-              return (
-                <Link to={`/detail/${item.id}`} key={item.id}>
-                  <Card color={item.color}>
-                    <Name>
-                      <img className='ball' src={PokeBall} alt='포켓볼사진' />
-                      <p className='number'> No.{item.id}</p>
-                    </Name>
-                    <Img src={item.img} />
-                    <p className='name'> {item.name}</p>
-                  </Card>
-                </Link>
-              );
-            })}
-          </> */}
-      {/* )} */}
 
       {/* {ToggleValue ? (
           <>
@@ -121,11 +94,11 @@ const Card = styled.div<{ color?: string }>`
   }
   .number {
     margin-right: 10px;
-    font-family: "Press Start 2P", cursive;
+    font-family: 'Press Start 2P', cursive;
     color: #000;
   }
   .name {
-    font-family: "Poor Story", cursive;
+    font-family: 'Poor Story', cursive;
     font-size: 25px;
     color: #000;
     position: relative;

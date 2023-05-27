@@ -1,15 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import styled from 'styled-components';
-import { Data } from '../atom';
-import Cards from '../components/Card';
-import Filter from '../components/filter';
-import MarginBottom from '../components/layout/margin-bottom copy';
-import Search from '../components/Search';
+import { ForwardedRef, useEffect, useRef, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import styled, { keyframes } from "styled-components";
+import { PokeMonData } from "../atom";
+import Cards from "../components/Card";
+import Filter from "../components/filter";
+import MarginBottom from "../components/layout/margin-bottom copy";
+import Search from "../components/Search";
+import { ReactComponent as Spinner } from "../assets/spinner.svg";
 
+/** 메인 홈 페이지 */
 const Home = () => {
-  const [pokeMonsData, setPokeMonsData] = useRecoilState(Data);
-
+  /** 스토어에 저장된 포켓몬 데이터 */
+  const setPokeMonData = useSetRecoilState(PokeMonData);
+  const pokemonData = useRecoilValue(PokeMonData);
+  /** 로딩 상태 */
   const [isLoading, setIsLoading] = useState(true);
   const [count, setCount] = useState(100);
 
@@ -28,7 +32,7 @@ const Home = () => {
         return {
           id: pokemonJson.id,
           name: detailJson.names[2].name,
-          img: pokemonJson.sprites.other['official-artwork'].front_default,
+          img: pokemonJson.sprites.other["official-artwork"].front_default,
           front_img: pokemonJson.sprites.front_default,
           back_img: pokemonJson.sprites.back_default,
           type: pokemonJson.types[0].type.name,
@@ -40,7 +44,8 @@ const Home = () => {
         };
       })
     );
-    setPokeMonsData(pokemonItem);
+    /** 새로운 포멧몬 데이터 업데이트 */
+    setPokeMonData(pokemonItem);
     setIsLoading(false);
   };
 
@@ -51,7 +56,7 @@ const Home = () => {
     fetchPokemons(count);
   }, [count]);
 
-  const scrollEnd = useRef<any>();
+  const scrollEnd = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!isLoading) {
@@ -63,18 +68,26 @@ const Home = () => {
         },
         { threshold: 0.2 }
       );
-      observer.observe(scrollEnd.current);
+      if (scrollEnd.current) {
+        observer.observe(scrollEnd.current);
+      }
+      console.log("정해석", observer.observe);
     }
   }, [isLoading]);
 
   return (
     <Section>
-      {/* <Filter /> */}
-      <MarginBottom margin={20} />
-      <Search />
       <Filter />
+      <MarginBottom margin={20} />
       <MarginBottom margin={50} />
-      <Cards scrollEnd={scrollEnd} />
+      <CardBox>
+        <Cards pokeMonData={pokemonData} ref={scrollEnd} />
+      </CardBox>
+      <MarginBottom margin={50} />
+      <Loader>
+        <Spinner width={50} height={50} fill="#fff" className="Loader" />
+      </Loader>
+      <MarginBottom margin={50} />
     </Section>
   );
 };
@@ -90,4 +103,44 @@ const Section = styled.section`
   justify-content: center;
   align-items: center;
   background-color: ${(props) => props.theme.bgColor};
+`;
+
+const CardBox = styled.div`
+  max-width: 1200px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  justify-content: space-around;
+  /* margin: 20px; */
+  align-items: center;
+  /* margin: 0 auto; */
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media screen and (max-width: 425px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+`;
+
+const Rotate = keyframes`
+ 100% {
+    	transform: rotate(360deg);
+    }
+`;
+
+const Loader = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin: 0 auto;
+  width: 100%;
+  color: #fff;
+  font-size: 24px;
+
+  .Loader {
+    animation: ${Rotate} 1s linear infinite;
+  }
 `;

@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
-import styled from 'styled-components';
-import { Theme } from '../atom';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import styled from "styled-components";
+import { Theme } from "../atom";
 
 const Nav = () => {
   const [toggle, setToggle] = useState(false); // Toggle switch 를 관리하는 상태
@@ -14,7 +14,7 @@ const Nav = () => {
   }; // Toggle 이벤트
   return (
     <Navbar>
-      <Link to='/'>
+      <Link to="/">
         <Logo>PokemonBook</Logo>
       </Link>
       {/* <Toggle className='toggleSwitchBox'>
@@ -46,7 +46,7 @@ const Navbar = styled.nav`
 const Logo = styled.div`
   cursor: pointer;
 
-  font-family: 'Press Start 2P';
+  font-family: "Press Start 2P";
   font-size: 40px;
   color: ${(props) => props.theme.textColor};
   @media screen and (max-width: 768px) {

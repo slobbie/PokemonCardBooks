@@ -1,58 +1,71 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { SearchData, Data, Toggle } from '../atom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { SearchData, PokeMonData } from '../atom';
 import styled from 'styled-components';
 import React, { useState } from 'react';
+import SearchImg from '../assets/searchIcon.png';
+import { useNavigate } from 'react-router-dom';
 
+/** 검색 컴포넌트 */
 const Search = () => {
-  const [searchData, setSearchData] = useRecoilState(SearchData);
+  const navigate = useNavigate();
 
-  const data: any = useRecoilValue(Data);
-  const search: any = document.getElementById('search');
-  const [toggleValue, setToggleValue] = useRecoilState(Toggle);
+  /** 포켓몬 데이터 */
+  const pokemonData = useRecoilValue(PokeMonData);
 
-  const [searchTerm, setSearchTerm] = useState('');
+  /** 포켓몬 셋팅 함수 */
+  const setSearchData = useSetRecoilState(SearchData);
 
+  /** 검색 input 상태 */
+  const [search, setSearch] = useState('');
+
+  /** 검색 onChange event */
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  /** 검색 이벤트 */
   const onSearch = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    const searchData = data.filter(({ name }: any) => name === search.value);
+    const searchData = pokemonData.filter(({ name }) => name === search);
     if (searchData) {
       setSearchData(searchData);
-      setToggleValue(true);
+      navigate(`/search/${searchData[0].name}`);
     }
     if (searchData.length === 0) {
       alert('항목없음');
     }
+    setSearch('');
   };
 
+  /** 검색 엔터 이벤트 */
   const onkeyPress = (e: any) => {
     if (e.key === 'Enter') {
       onSearch(e);
     }
   };
-  const handlePokemonReset = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
 
-  const onReset = (e: React.MouseEvent<HTMLElement>) => {
-    setToggleValue(false);
-  };
+  // const onReset = (e: React.MouseEvent<HTMLElement>) => {
+  //   setToggleValue(false);
+  // };
 
   return (
-      <SearchBar>
-       <Warper>
-          <Input
-            onChange={handlePokemonReset}
-            onKeyPress={onkeyPress}
-            placeholder='찾고 있는 포켓몬을 검색해 보세요'
-            id='search'
-            type='text'
-          />
-          <BtnBox>
-            <Btn onClick={onSearch}>search</Btn>
-            <Btn onClick={onReset}>Reset</Btn>
-          </BtnBox>
-       </Warper>
-      </SearchBar>
+    <SearchBar>
+      <Warper>
+        <Input
+          value={search}
+          onChange={onChangeSearch}
+          onKeyPress={onkeyPress}
+          placeholder='찾고 있는 포켓몬을 검색해 보세요'
+          type='text'
+        />
+        <BtnBox>
+          <Btn onClick={onSearch}>
+            <SearchIcon src={SearchImg} />
+          </Btn>
+          {/* <Btn onClick={onReset}>Reset</Btn> */}
+        </BtnBox>
+      </Warper>
+    </SearchBar>
   );
 };
 
@@ -71,13 +84,15 @@ const Warper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: ${(theme) => theme.theme.bg_fff};
   @media screen and (max-width: 768px) {
     flex-direction: column;
   }
-`
+`;
 
 const Input = styled.input`
-  max-width: 600px;
   width: 100%;
   height: 50px;
   border: none;
@@ -102,16 +117,21 @@ const Btn = styled.button`
   color: #000;
   border-radius: 15px;
   height: 50px;
+  background-color: transparent;
 `;
 
 const BtnBox = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 240px;
+  width: 100px;
   justify-content: space-around;
   @media screen and (max-width: 768px) {
     width: 100%;
     margin: 30px 0 auto;
   }
+`;
+
+const SearchIcon = styled.img`
+  width: 30px;
+  height: 30px;
 `;

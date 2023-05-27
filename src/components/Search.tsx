@@ -1,7 +1,8 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { SearchData, Data, Toggle } from '../atom';
+import {SearchData, Data, Toggle, Theme} from '../atom';
 import styled from 'styled-components';
 import React, { useState } from 'react';
+import SearchImg from '../assets/searchIcon.png'
 
 const Search = () => {
   const [searchData, setSearchData] = useRecoilState(SearchData);
@@ -48,8 +49,10 @@ const Search = () => {
             type='text'
           />
           <BtnBox>
-            <Btn onClick={onSearch}>search</Btn>
-            <Btn onClick={onReset}>Reset</Btn>
+            <Btn onClick={onSearch}>
+              <SearchIcon src={SearchImg} />
+            </Btn>
+            {/* <Btn onClick={onReset}>Reset</Btn> */}
           </BtnBox>
        </Warper>
       </SearchBar>
@@ -71,13 +74,16 @@ const Warper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: ${(theme) => theme.theme.bg_fff};
   @media screen and (max-width: 768px) {
     flex-direction: column;
   }
 `
 
 const Input = styled.input`
-  max-width: 600px;
+  /* max-width: 600px; */
   width: 100%;
   height: 50px;
   border: none;
@@ -102,16 +108,22 @@ const Btn = styled.button`
   color: #000;
   border-radius: 15px;
   height: 50px;
+  background-color: transparent;
 `;
 
 const BtnBox = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 240px;
+  width: 100px;
+  /* max-width: 240px; */
   justify-content: space-around;
   @media screen and (max-width: 768px) {
     width: 100%;
     margin: 30px 0 auto;
   }
 `;
+
+const SearchIcon = styled.img`
+  width: 30px;
+  height: 30px;
+`

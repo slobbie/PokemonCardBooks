@@ -1,22 +1,28 @@
-import { darkTheme, lightTheme } from './styeld/theme';
-import { ThemeProvider } from 'styled-components';
-import { createGlobalStyle } from 'styled-components';
-import Home from './layout/Home';
-import Nav from './layout/Nav';
-import { Route, Routes } from 'react-router-dom';
-import Detail from './components/Detail';
-import { useRecoilValue } from 'recoil';
-import { Theme } from './atom';
+import { darkTheme, lightTheme } from "./styeld/theme";
+import styled, { ThemeProvider } from "styled-components";
+import { createGlobalStyle } from "styled-components";
+import Home from "./layout/Home";
+import Nav from "./layout/Nav";
+import { Route, Routes } from "react-router-dom";
+import Detail from "./components/Detail";
+import { useRecoilValue } from "recoil";
+import { Theme } from "./atom";
+import Search from "./components/Search";
+import SearchPage from "./layout/SearchPage";
 
 function App() {
   const ThemeColor = useRecoilValue(Theme);
   return (
     <ThemeProvider theme={ThemeColor ? darkTheme : lightTheme}>
       <GlobalStyle />
-      <Nav />
+      <Section>
+        <Nav />
+        <Search />
+      </Section>
       <Routes>
-        <Route path='/*' element={<Home />} />
-        <Route path='/detail/*' element={<Detail />} />
+        <Route path="/*" element={<Home />} />
+        <Route path="/detail/*" element={<Detail />} />
+        <Route path="/search/*" element={<SearchPage />} />
       </Routes>
     </ThemeProvider>
   );
@@ -24,11 +30,20 @@ function App() {
 
 export default App;
 
+const Section = styled.div`
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+`;
+
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp, 
+del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
 b, u, i, center,
 dl, dt, dd, menu, ol, ul, li,
@@ -56,6 +71,10 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 menu, ol, ul {
   list-style: none;
@@ -78,10 +97,10 @@ table {
 body {
   font-family: 'Source Sans Pro', sans-serif;
   background-color: ${(props) => props.theme.bgColor};
- 
+
 }
 a{
   text-decoration: none;
   color: inherit;
-} 
+}
 `;

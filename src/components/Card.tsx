@@ -1,55 +1,52 @@
-import { Link, useLocation } from 'react-router-dom';
-import { Data, PokeMonData, SearchData, Toggle } from '../atom';
-import { useRecoilValue } from 'recoil';
-import styled, { keyframes } from 'styled-components';
-import PokeBall from '../assets/pokeball.svg';
-import { ReactComponent as Spinner } from '../assets/spinner.svg';
-import { type } from 'os';
+import { Link, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import PokeBall from "../assets/pokeball.svg";
+import { ReactComponent as Spinner } from "../assets/spinner.svg";
+import { type } from "os";
+import { ForwardedRef, forwardRef } from "react";
+import { PokeMonDataInterface } from "../common/interface/pokemon.interface";
 
-export interface IPokemoms {
-  color: string;
-  genera: string;
-  height: number;
-  id: number;
-  img: string;
-  name: string;
-  text: string;
-  type: string;
-  weight: number;
+interface CardsInterface {
+  pokeMonData: PokeMonDataInterface[];
 }
 
-const Cards = ({ scrollEnd, ToggleData }: any) => {
+/** 포켓몬 카드 컴포넌트 */
+const Cards = (
+  { pokeMonData }: CardsInterface,
+  ref: ForwardedRef<HTMLDivElement>
+) => {
   /** 스토어에 저장된 포켓몬 데이터 */
-  const pokeMonData = useRecoilValue(PokeMonData);
+  // const pokeMonData = useRecoilValue(PokeMonData);
+  const renderDataList = pokeMonData;
 
-  const SearchDatas: any = useRecoilValue(SearchData);
-  const ToggleValue = useRecoilValue(Toggle);
+  // const SearchDatas: any = useRecoilValue(SearchData);
+  // const ToggleValue = useRecoilValue(Toggle);
   const path = useLocation();
-  const FilterType = path.pathname.replace('/', '');
+  const FilterType = path.pathname.replace("/", "");
 
-  const FilterData = pokeMonData.filter((type) => type.type === FilterType);
+  const FilterData = renderDataList.filter((type) => type.type === FilterType);
 
   return (
     <>
-      <CardBox>
-        {path.pathname === '/' ? (
-          <>
-            {pokeMonData.map((item) => {
-              return (
-                <Link to={`/detail/${item.id}`} key={item.id}>
-                  <Card color={item.color}>
-                    <Name>
-                      <img className='ball' src={PokeBall} alt='포켓볼사진' />
-                      <p className='number'> No.{item.id}</p>
-                    </Name>
-                    <Img src={item.img} />
-                    <p className='name'> {item.name}</p>
-                  </Card>
-                </Link>
-              );
-            })}
-          </>
-        ) : (
+      {/* <CardBox> */}
+      {/* {path.pathname === '/' ? ( */}
+      <>
+        {renderDataList.map((item) => {
+          return (
+            <Link to={`/detail/${item.id}`} key={item.id}>
+              <Card color={item.color}>
+                <Name>
+                  <img className="ball" src={PokeBall} alt="포켓볼사진" />
+                  <p className="number"> No.{item.id}</p>
+                </Name>
+                <Img src={item.img} />
+                <p className="name"> {item.name}</p>
+              </Card>
+            </Link>
+          );
+        })}
+      </>
+      {/* ) : (
           <>
             {FilterData.map((item) => {
               return (
@@ -65,11 +62,10 @@ const Cards = ({ scrollEnd, ToggleData }: any) => {
                 </Link>
               );
             })}
-          </>
-        )}
+          </> */}
+      {/* )} */}
 
-
-        {ToggleValue ? (
+      {/* {ToggleValue ? (
           <>
             {SearchDatas ? (
               <>
@@ -94,35 +90,17 @@ const Cards = ({ scrollEnd, ToggleData }: any) => {
               </>
             ) : null}
           </>
-        ) : null}
-        <div ref={scrollEnd}></div>
-      </CardBox>
-      <Loader>
+        ) : null} */}
+      <div ref={ref}></div>
+      {/* </CardBox> */}
+      {/* <Loader>
         <Spinner width={50} height={50} fill='#fff' className='Loader' />
-      </Loader>
+      </Loader> */}
     </>
   );
 };
 
-export default Cards;
-
-const CardBox = styled.div`
-  max-width: 50%;
-  width: 50%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  justify-content: space-around;
-  margin: 20px;
-  align-items: center;
-  margin: 0 auto;
-  @media screen and (max-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media screen and (max-width: 425px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-`;
+export default forwardRef<HTMLDivElement, CardsInterface>(Cards);
 
 const Card = styled.div<{ color?: string }>`
   width: 200px;
@@ -143,11 +121,11 @@ const Card = styled.div<{ color?: string }>`
   }
   .number {
     margin-right: 10px;
-    font-family: 'Press Start 2P', cursive;
+    font-family: "Press Start 2P", cursive;
     color: #000;
   }
   .name {
-    font-family: 'Poor Story', cursive;
+    font-family: "Poor Story", cursive;
     font-size: 25px;
     color: #000;
     position: relative;
@@ -187,27 +165,5 @@ const Img = styled.img`
   }
   @media screen and (max-width: 768px) {
     bottom: 10px;
-  }
-`;
-
-const Rotate = keyframes`
- 100% {
-    	transform: rotate(360deg);
-    }
-`;
-
-const Loader = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  margin: 0 auto;
-  width: 100%;
-  color: #fff;
-  font-size: 24px;
-
-  .Loader {
-    animation: ${Rotate} 1s linear infinite;
   }
 `;

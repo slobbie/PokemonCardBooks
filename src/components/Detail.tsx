@@ -137,11 +137,11 @@ const Img = styled.img`
 
 const animate = keyframes`
    0% {
-   
+
       transform: translateX(0);
     }
     40% {
-      
+
       transform: translatey(-10px);
     }
     70% {
@@ -154,11 +154,11 @@ const animate = keyframes`
 
 const animate2 = keyframes`
    0% {
-   
+
       transform: translateX(0);
     }
     40% {
-      
+
       transform: translatey(10px);
     }
     70% {

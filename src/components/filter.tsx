@@ -1,33 +1,34 @@
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { setBackgroundColor } from "../styeld/FilterColorModel";
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { setBackgroundColor } from '../styeld/FilterColorModel';
 
+/** 필터 컴포넌트 */
 const Filter = () => {
   const types = [
-    "grass",
-    "ghost",
-    "ice",
-    "ground",
-    "electric",
-    "poison",
-    "dragon",
-    "normal",
-    "steel",
-    "flying",
-    "fairy",
-    "fire",
-    "water",
-    "bug",
-    "dark",
-    "rock",
-    "psychic",
-    "fighting",
+    'grass',
+    'ghost',
+    'ice',
+    'ground',
+    'electric',
+    'poison',
+    'dragon',
+    'normal',
+    'steel',
+    'flying',
+    'fairy',
+    'fire',
+    'water',
+    'bug',
+    'dark',
+    'rock',
+    'psychic',
+    'fighting',
   ];
   const Navigate = useNavigate();
   return (
     <FilterBox>
       <ItemBox>
-        <TypeBtn color="#333" onClick={() => Navigate("/")}>
+        <TypeBtn color='#333' onClick={() => Navigate('/')}>
           ALL
         </TypeBtn>
         {types.map((type: any) => {
@@ -84,7 +85,7 @@ const TypeBtn = styled.button`
   background-color: ${(props) => props.color};
   margin: 5px;
   font-size: 10px;
-  font-family: "Press Start 2P";
+  font-family: 'Press Start 2P';
   -webkit-transition: all 250ms linear;
   transition: all 250ms linear;
 

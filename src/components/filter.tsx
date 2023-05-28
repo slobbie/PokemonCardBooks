@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { setBackgroundColor } from '../styeld/FilterColorModel';
+import { useSetRecoilState } from 'recoil';
+import { isLoading } from '../atom';
 
 /** 필터 컴포넌트 */
 const Filter = () => {
@@ -25,6 +27,16 @@ const Filter = () => {
     'fighting',
   ];
   const Navigate = useNavigate();
+
+  /** 스토어에 데이터 저장 함수 */
+  const setIsLoading = useSetRecoilState(isLoading);
+
+  /** 필터 클릭 이벤트 */
+  const onFilter = (pType: string) => {
+    setIsLoading(false);
+    Navigate(pType);
+  };
+
   return (
     <FilterBox>
       <ItemBox>
@@ -36,7 +48,7 @@ const Filter = () => {
             <TypeBtn
               key={type}
               color={setBackgroundColor(type)}
-              onClick={() => Navigate(type)}
+              onClick={() => onFilter(type)}
             >
               {type}
             </TypeBtn>

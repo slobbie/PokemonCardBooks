@@ -1,68 +1,83 @@
-import { ForwardedRef, useEffect, useRef, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled, { keyframes } from 'styled-components';
-import { PokeMonData } from '../atom';
+import { PokeMonData, isLoading } from '../atom';
 import Cards from '../components/Card';
 import Filter from '../components/filter';
 import MarginBottom from '../components/layout/margin-bottom copy';
-import Search from '../components/Search';
 import { ReactComponent as Spinner } from '../assets/spinner.svg';
 import { useLocation } from 'react-router-dom';
 
 /** 메인 홈 페이지 */
 const Home = () => {
-  /** 스토어에 저장된 포켓몬 데이터 */
-  const setPokeMonData = useSetRecoilState(PokeMonData);
-  const pokemonData = useRecoilValue(PokeMonData);
   const path = useLocation();
 
+  /** 스토어에 데이터 저장 함수 */
+  const setPokeMonData = useSetRecoilState(PokeMonData);
+
+  /** 스토어에 저장된 포켓몬 데이터 */
+  const pokemonData = useRecoilValue(PokeMonData);
+
+  /** loading ref */
+  const scrollEnd = useRef<HTMLDivElement | null>(null);
+
   /** 로딩 상태 */
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useRecoilState(isLoading);
+
+  /** 한번에 보여줄 데이터 수량 */
   const [count, setCount] = useState(100);
 
-  const fetchPokemons = async (count: number) => {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${count}`);
-    const json = await res.json();
-    const { results } = json;
+  /** 포켓몬 데이터 호출 */
+  const fetchPokemons = useCallback(
+    async (pCount: number) => {
+      const res = await fetch(
+        `https://pokeapi.co/api/v2/pokemon?limit=${pCount}`
+      );
+      const json = await res.json();
+      const { results } = json;
+      setLoading(true);
+      const pokemonItem = await Promise.all(
+        results.map(async ({ url }: any) => {
+          const pokemonRes = await fetch(url);
+          const pokemonJson = await pokemonRes.json();
+          const detailUrl = pokemonJson.species.url;
+          const detailRes = await fetch(detailUrl);
+          const detailJson = await detailRes.json();
+          return {
+            id: pokemonJson.id,
+            name: detailJson.names[2].name,
+            img: pokemonJson.sprites.other['official-artwork'].front_default,
+            front_img: pokemonJson.sprites.front_default,
+            back_img: pokemonJson.sprites.back_default,
+            type: pokemonJson.types[0].type.name,
+            color: detailJson.color.name,
+            text: detailJson.flavor_text_entries[23].flavor_text,
+            genera: detailJson.genera[1].genus,
+            height: pokemonJson.height,
+            weight: pokemonJson.weight,
+          };
+        })
+      );
+      /** 새로운 포멧몬 데이터 업데이트 */
+      setPokeMonData(pokemonItem);
+      setLoading(false);
+    },
+    [setPokeMonData]
+  );
 
-    const pokemonItem: any = await Promise.all(
-      results.map(async ({ url }: any) => {
-        const pokemonRes = await fetch(url);
-        const pokemonJson = await pokemonRes.json();
-        const detailUrl = pokemonJson.species.url;
-        const detailRes = await fetch(detailUrl);
-        const detailJson = await detailRes.json();
-        return {
-          id: pokemonJson.id,
-          name: detailJson.names[2].name,
-          img: pokemonJson.sprites.other['official-artwork'].front_default,
-          front_img: pokemonJson.sprites.front_default,
-          back_img: pokemonJson.sprites.back_default,
-          type: pokemonJson.types[0].type.name,
-          color: detailJson.color.name,
-          text: detailJson.flavor_text_entries[23].flavor_text,
-          genera: detailJson.genera[1].genus,
-          height: pokemonJson.height,
-          weight: pokemonJson.weight,
-        };
-      })
-    );
-    /** 새로운 포멧몬 데이터 업데이트 */
-    setPokeMonData(pokemonItem);
-    setIsLoading(false);
-  };
-
+  /** 페이지의 하단으로 진입할때 몇개의 데이터를 더 보여줄지설정 */
   const loadMore = () => {
     setCount((prev) => prev + 9);
   };
+
+  /** 데이터 호출  */
   useEffect(() => {
     fetchPokemons(count);
   }, [count]);
 
-  const scrollEnd = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => {
-    if (!isLoading) {
+    if (!loading) {
       const observer = new IntersectionObserver(
         (entrise) => {
           if (entrise[0].isIntersecting) {
@@ -75,10 +90,12 @@ const Home = () => {
         observer.observe(scrollEnd.current);
       }
     }
-  }, [isLoading]);
+  }, [loading]);
 
+  /** url 에서 선택한 타입을 가져와줌 */
   const FilterType = path.pathname.replace('/', '');
 
+  /** 선택한 타입을 필터링한 데이터 */
   const FilterData = pokemonData.filter((type) => type.type === FilterType);
 
   return (
@@ -93,12 +110,12 @@ const Home = () => {
         />
       </CardBox>
       <MarginBottom margin={50} />
-      {isLoading ? (
+      {/* TODO: 어떤식으로 로딩 처리 할지에 대한 고민 */}
+      {loading ? (
         <Loader>
           <Spinner width={50} height={50} fill='#fff' className='Loader' />
         </Loader>
       ) : null}
-
       <MarginBottom margin={50} />
     </Section>
   );
@@ -124,9 +141,7 @@ const CardBox = styled.div`
   grid-template-columns: repeat(5, 1fr);
   gap: 15px;
   justify-content: space-around;
-  /* margin: 20px; */
   align-items: center;
-  /* margin: 0 auto; */
   @media screen and (max-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
   }

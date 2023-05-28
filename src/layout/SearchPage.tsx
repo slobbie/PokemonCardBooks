@@ -9,9 +9,11 @@ import { useNavigate } from 'react-router-dom';
 /** 검색 결과 페이지 */
 const SearchPage = () => {
   const navigate = useNavigate();
+
   /** 검색 데이터 */
   const pokemonSearchData = useRecoilValue(SearchData);
 
+  /** 뒤로가기 버튼 */
   const onBackClick = () => {
     navigate(`/`);
   };

@@ -1,8 +1,6 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PokeBall from '../assets/pokeball.svg';
-import { ReactComponent as Spinner } from '../assets/spinner.svg';
-import { type } from 'os';
 import { ForwardedRef, forwardRef } from 'react';
 import { PokeMonDataInterface } from '../common/interface/pokemon.interface';
 
@@ -16,7 +14,6 @@ const Cards = (
   ref: ForwardedRef<HTMLDivElement>
 ) => {
   /** 스토어에 저장된 포켓몬 데이터 */
-  // const pokeMonData = useRecoilValue(PokeMonData);
   const renderDataList = pokeMonData;
 
   return (
@@ -37,38 +34,7 @@ const Cards = (
           );
         })}
       </>
-
-      {/* {ToggleValue ? (
-          <>
-            {SearchDatas ? (
-              <>
-                {SearchDatas.map((item: IPokemoms) => {
-                  return (
-                    <Link to={`/detail/${item.id}`} key={item.id}>
-                      <Card color={item.color}>
-                        <Name>
-                          <img
-                            className='ball'
-                            src={PokeBall}
-                            alt='포켓볼사진'
-                          />
-                          <p className='number'> No.{item.id}</p>
-                        </Name>
-                        <Img src={item.img} />
-                        <p className='name'> {item.name}</p>
-                      </Card>
-                    </Link>
-                  );
-                })}
-              </>
-            ) : null}
-          </>
-        ) : null} */}
       <div ref={ref}></div>
-      {/* </CardBox> */}
-      {/* <Loader>
-        <Spinner width={50} height={50} fill='#fff' className='Loader' />
-      </Loader> */}
     </>
   );
 };

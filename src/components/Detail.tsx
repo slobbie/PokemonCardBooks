@@ -1,25 +1,35 @@
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { Data } from '../atom';
 import styled, { keyframes } from 'styled-components';
+import { PokeMonData } from '../atom';
 
 const Detail = () => {
   const Navigate = useNavigate();
-  const onClick = () => {
+  /** url 의 정보를 가져옴 */
+  const matchId = useMatch('/detail/:id');
+
+  /** 뒤로가기 이벤트 */
+  const onBackClick = () => {
     Navigate(`/`);
   };
-  const matchId = useMatch('/detail/:id');
-  const data: any = useRecoilValue(Data);
 
+  /** 저장된 포켓몬 데이터 */
+  const pokemonData = useRecoilValue(PokeMonData);
+
+  /** 선택한 포멧몬 디테일 데이터 */
   const clickedData =
     matchId?.params.id &&
-    data?.find((item: any) => item.id + '' === matchId.params.id);
+    pokemonData?.find((item) => item.id + '' === matchId.params.id);
 
   return (
     <DetailSection>
       <MiniImgBox>
-        <MiniImg className='miniImg front' src={clickedData?.front_img} />
-        <MiniImg className='miniImg back' src={clickedData?.back_img} />
+        {clickedData && (
+          <>
+            <MiniImg className='miniImg front' src={clickedData?.front_img} />
+            <MiniImg className='miniImg back' src={clickedData?.back_img} />
+          </>
+        )}
       </MiniImgBox>
       <DetailBox>
         {clickedData && (
@@ -42,7 +52,7 @@ const Detail = () => {
           </>
         )}
       </DetailBox>
-      <Btn onClick={onClick}>Back</Btn>
+      <Btn onClick={onBackClick}>Back</Btn>
     </DetailSection>
   );
 };
@@ -137,11 +147,11 @@ const Img = styled.img`
 
 const animate = keyframes`
    0% {
-   
+
       transform: translateX(0);
     }
     40% {
-      
+
       transform: translatey(-10px);
     }
     70% {
@@ -154,11 +164,11 @@ const animate = keyframes`
 
 const animate2 = keyframes`
    0% {
-   
+
       transform: translateX(0);
     }
     40% {
-      
+
       transform: translatey(10px);
     }
     70% {

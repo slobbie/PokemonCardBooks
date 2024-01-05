@@ -3,8 +3,9 @@
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"],
-      "@src/assets/*": ["src/assets/*"],
+      "@assets/*": ["src/assets/*"],
       "@common/*": ["src/common/*"],
+      "@constants/*": ["src/common/constants/*"],
       "@routes/*": ["src/routes/*"],
       "@utils/*": ["src/common/utils/*"],
       "@feature/*": ["src/feature/*"],

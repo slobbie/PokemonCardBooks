@@ -1,7 +1,7 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { SearchData, PokeMonData } from '@atom/main/atom';
 import React, { useState } from 'react';
-import SearchImg from '../../../assets/searchIcon.png';
+import SearchImg from '@assets/searchIcon.png';
 import { useNavigate } from 'react-router-dom';
 import * as SearchStyle from '@feature/main/styles/search.style';
 

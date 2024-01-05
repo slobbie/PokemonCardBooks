@@ -3,11 +3,11 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { PokeMonData, isLoading } from '@atom/main/atom';
 import Cards from '@feature/main/components/Card';
 import Filter from '@src/feature/main/components/TypeFilter';
-import { ReactComponent as Spinner } from '../../../assets/spinner.svg';
+import { ReactComponent as Spinner } from '@assets/spinner.svg';
 import { useLocation } from 'react-router-dom';
 import MarginModel from '@src/common/components/marginModel/MarginModel';
 import * as MainStyles from '@feature/main/styles/mainPage.style';
-
+import services from '@constants/index';
 /** 메인 홈 페이지 */
 const MainPage = () => {
   const path = useLocation();
@@ -31,9 +31,7 @@ const MainPage = () => {
   /** 포켓몬 데이터 호출 */
   const fetchPokemons = useCallback(
     async (pCount: number) => {
-      const res = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=${pCount}`
-      );
+      const res = await fetch(`${services.apiServices.url.pokeApi}${pCount}`);
       const json = await res.json();
       const { results } = json;
       setLoading(true);

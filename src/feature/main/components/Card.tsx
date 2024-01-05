@@ -1,9 +1,9 @@
-import PokeBall from '../../../assets/pokeball.svg';
+import PokeBall from '@assets/pokeball.svg';
 import { ForwardedRef, forwardRef } from 'react';
 import { PokeMonDataInterface } from '@common/interface/pokemon.interface';
 import { Link } from 'react-router-dom';
 import * as CardStyle from '@feature/main/styles/card.style';
-
+import path from '@constants/index';
 interface CardsInterface {
   pokeMonData: PokeMonDataInterface[];
 }
@@ -21,7 +21,7 @@ const Cards = (
       <>
         {renderDataList.map((item) => {
           return (
-            <Link to={`/detail/${item.id}`} key={item.id}>
+            <Link to={`${path.router.detail}/${item.id}`} key={item.id}>
               <CardStyle.Card color={item.color}>
                 <CardStyle.Name>
                   <img className='ball' src={PokeBall} alt='포켓볼사진' />

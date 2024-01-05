@@ -1,32 +1,33 @@
 import { atom } from 'recoil';
 import { PokeMonDataInterface } from '@common/interface/pokemon.interface';
+import Key from '@constants/index';
 
 export const PokeMonData = atom<PokeMonDataInterface[]>({
-  key: 'PokeMonData',
+  key: Key.atomKey.PokeMonData,
   default: [],
 });
 
 export const SearchData = atom<PokeMonDataInterface[]>({
-  key: 'SearchData',
+  key: Key.atomKey.SearchData,
   default: [],
 });
 
 export const isLoading = atom<boolean>({
-  key: 'isLoading',
+  key: Key.atomKey.isLoading,
   default: false,
 });
 
 export const Toggle = atom({
-  key: 'Toggle',
+  key: Key.atomKey.Toggle,
   default: false,
 });
 
 export const ToggleData = atom({
-  key: 'ToggleData',
+  key: Key.atomKey.ToggleData,
   default: [],
 });
 
 export const Theme = atom({
-  key: 'theme',
+  key: Key.atomKey.Theme,
   default: true,
 });

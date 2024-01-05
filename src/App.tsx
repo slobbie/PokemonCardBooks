@@ -8,6 +8,7 @@ import Nav from '@src/common/layout/Nav';
 import Search from '@feature/main/components/Search';
 import MainPage from '@feature/main/page/MainPage';
 import DetailPage from '@src/feature/main/page/DetailPage';
+import path from '@constants/index';
 // import SearchPage from '@feature/search/SearchPage';
 
 function App() {
@@ -20,8 +21,8 @@ function App() {
         <Search />
       </Section>
       <Routes>
-        <Route path='/*' element={<MainPage />} />
-        <Route path='detail/*' element={<DetailPage />} />
+        <Route path={`${path.router.main}*`} element={<MainPage />} />
+        <Route path={`${path.router.detail}/*`} element={<DetailPage />} />
         {/* <Route path='search/*' element={<SearchPage />} /> */}
       </Routes>
     </ThemeProvider>

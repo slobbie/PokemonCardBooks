@@ -1,9 +1,9 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { SearchData, PokeMonData } from '@atom/main/atom';
-import styled from 'styled-components';
 import React, { useState } from 'react';
 import SearchImg from '../../../assets/searchIcon.png';
 import { useNavigate } from 'react-router-dom';
+import * as SearchStyle from '@feature/main/styles/search.style';
 
 /** 검색 컴포넌트 */
 const Search = () => {
@@ -49,89 +49,24 @@ const Search = () => {
   // };
 
   return (
-    <SearchBar>
-      <Warper>
-        <Input
+    <SearchStyle.SearchBar>
+      <SearchStyle.Warper>
+        <SearchStyle.Input
           value={search}
           onChange={onChangeSearch}
           onKeyPress={onkeyPress}
           placeholder='찾고 있는 포켓몬을 검색해 보세요'
           type='text'
         />
-        <BtnBox>
-          <Btn onClick={onSearch}>
-            <SearchIcon src={SearchImg} />
-          </Btn>
+        <SearchStyle.BtnBox>
+          <SearchStyle.Btn onClick={onSearch}>
+            <SearchStyle.SearchIcon src={SearchImg} />
+          </SearchStyle.Btn>
           {/* <Btn onClick={onReset}>Reset</Btn> */}
-        </BtnBox>
-      </Warper>
-    </SearchBar>
+        </SearchStyle.BtnBox>
+      </SearchStyle.Warper>
+    </SearchStyle.SearchBar>
   );
 };
 
 export default Search;
-
-const SearchBar = styled.div`
-  max-width: 1200px;
-  width: 100%;
-`;
-
-const Warper = styled.div`
-  max-width: 880px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 auto;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: ${(theme) => theme.theme.bg_fff};
-  @media screen and (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const Input = styled.input`
-  width: 100%;
-  height: 50px;
-  border: none;
-  border-radius: 15px;
-  padding: 0 10px;
-  font-size: 13px;
-  :focus {
-    color: #333;
-    outline: none;
-  }
-  ::placeholder {
-    font-family: 'Press Start 2P';
-    font-size: 13px;
-    padding-left: 10px;
-  }
-`;
-
-const Btn = styled.button`
-  width: 100px;
-  font-family: 'Press Start 2P';
-  border: none;
-  color: #000;
-  border-radius: 15px;
-  height: 50px;
-  background-color: transparent;
-`;
-
-const BtnBox = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100px;
-  justify-content: space-around;
-  @media screen and (max-width: 768px) {
-    width: 100%;
-    margin: 30px 0 auto;
-  }
-`;
-
-const SearchIcon = styled.img`
-  width: 30px;
-  height: 30px;
-`;

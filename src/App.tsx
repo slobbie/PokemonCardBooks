@@ -4,7 +4,7 @@ import { createGlobalStyle } from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { Theme } from '@atom/main/atom';
-import Nav from '@common/layout/Nav';
+import Nav from '@src/common/layout/Nav';
 import Search from '@feature/main/components/Search';
 import MainPage from '@feature/main/page/MainPage';
 import DetailPage from '@src/feature/main/page/DetailPage';

@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import styled, { keyframes } from 'styled-components';
 import { PokeMonData, isLoading } from '@atom/main/atom';
 import Cards from '@feature/main/components/Card';
-import Filter from '@feature/main/components/filter';
+import Filter from '@src/feature/main/components/TypeFilter';
 import { ReactComponent as Spinner } from '../../../assets/spinner.svg';
 import { useLocation } from 'react-router-dom';
 import MarginModel from '@src/common/components/marginModel/MarginModel';
+import * as MainStyles from '@feature/main/styles/mainPage.style';
 
 /** 메인 홈 페이지 */
 const MainPage = () => {
@@ -99,75 +99,26 @@ const MainPage = () => {
   const FilterData = pokemonData.filter((type) => type.type === FilterType);
 
   return (
-    <Section>
+    <MainStyles.Section>
       <Filter />
       <MarginModel bottom={20} />
       <MarginModel bottom={50} />
-      <CardBox>
+      <MainStyles.CardBox>
         <Cards
           pokeMonData={FilterData.length > 0 ? FilterData : pokemonData}
           ref={scrollEnd}
         />
-      </CardBox>
+      </MainStyles.CardBox>
       <MarginModel bottom={50} />
       {/* TODO: 어떤식으로 로딩 처리 할지에 대한 고민 */}
       {loading ? (
-        <Loader>
+        <MainStyles.Loader>
           <Spinner width={50} height={50} fill='#fff' className='Loader' />
-        </Loader>
+        </MainStyles.Loader>
       ) : null}
       <MarginModel bottom={50} />
-    </Section>
+    </MainStyles.Section>
   );
 };
 
 export default MainPage;
-
-const Section = styled.section`
-  max-width: 1200px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  justify-content: center;
-  align-items: center;
-  background-color: ${(props) => props.theme.bgColor};
-`;
-
-const CardBox = styled.div`
-  max-width: 1200px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
-  justify-content: space-around;
-  align-items: center;
-  @media screen and (max-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media screen and (max-width: 425px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-`;
-
-const Rotate = keyframes`
- 100% {
-    	transform: rotate(360deg);
-    }
-`;
-
-const Loader = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  margin: 0 auto;
-  width: 100%;
-  color: #fff;
-  font-size: 24px;
-
-  .Loader {
-    animation: ${Rotate} 1s linear infinite;
-  }
-`;

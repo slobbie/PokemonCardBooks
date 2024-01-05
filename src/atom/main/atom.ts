@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { PokeMonDataInterface } from './common/interface/pokemon.interface';
+import { PokeMonDataInterface } from '@common/interface/pokemon.interface';
 
 export const PokeMonData = atom<PokeMonDataInterface[]>({
   key: 'PokeMonData',

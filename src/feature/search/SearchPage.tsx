@@ -1,10 +1,10 @@
 import React from 'react';
-import Cards from '../components/Card';
+import Cards from '@feature/main/components/Card';
 import { useRecoilValue } from 'recoil';
-import { SearchData } from '../atom';
+import { SearchData } from '@atom/main/atom';
 import styled from 'styled-components';
-import MarginBottom from '../components/layout/margin-bottom copy';
 import { useNavigate } from 'react-router-dom';
+import MarginModel from '@src/common/components/marginModel/MarginModel';
 
 /** 검색 결과 페이지 */
 const SearchPage = () => {
@@ -21,7 +21,7 @@ const SearchPage = () => {
   return (
     <Section>
       <ContentBox>
-        <MarginBottom margin={20} />
+        <MarginModel bottom={20} />
         <Cards pokeMonData={pokemonSearchData} />
       </ContentBox>
       <Btn onClick={onBackClick}>Back</Btn>

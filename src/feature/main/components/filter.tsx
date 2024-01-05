@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { setBackgroundColor } from '../styeld/FilterColorModel';
+import { setBackgroundColor } from '@common/utils/FilterColorModel';
 import { useSetRecoilState } from 'recoil';
-import { isLoading } from '../atom';
+import { isLoading } from '@atom/main/atom';
 
 /** 필터 컴포넌트 */
 const Filter = () => {

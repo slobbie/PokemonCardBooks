@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import PokeBall from '../assets/pokeball.svg';
+import PokeBall from '../../../assets/pokeball.svg';
 import { ForwardedRef, forwardRef } from 'react';
-import { PokeMonDataInterface } from '../common/interface/pokemon.interface';
+import { PokeMonDataInterface } from '@common/interface/pokemon.interface';
+import { Link } from 'react-router-dom';
 
 interface CardsInterface {
   pokeMonData: PokeMonDataInterface[];

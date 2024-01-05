@@ -1,14 +1,14 @@
-import { darkTheme, lightTheme } from "./styeld/theme";
-import styled, { ThemeProvider } from "styled-components";
-import { createGlobalStyle } from "styled-components";
-import Home from "./layout/Home";
-import Nav from "./layout/Nav";
-import { Route, Routes } from "react-router-dom";
-import Detail from "./components/Detail";
-import { useRecoilValue } from "recoil";
-import { Theme } from "./atom";
-import Search from "./components/Search";
-import SearchPage from "./layout/SearchPage";
+import { darkTheme, lightTheme } from './common/theme/theme';
+import styled, { ThemeProvider } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
+import { Route, Routes } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { Theme } from '@atom/main/atom';
+import Nav from '@common/layout/Nav';
+import Search from '@feature/main/components/Search';
+import MainPage from '@feature/main/page/MainPage';
+import DetailPage from '@src/feature/main/page/DetailPage';
+// import SearchPage from '@feature/search/SearchPage';
 
 function App() {
   const ThemeColor = useRecoilValue(Theme);
@@ -20,9 +20,9 @@ function App() {
         <Search />
       </Section>
       <Routes>
-        <Route path="/*" element={<Home />} />
-        <Route path="/detail/*" element={<Detail />} />
-        <Route path="/search/*" element={<SearchPage />} />
+        <Route path='/*' element={<MainPage />} />
+        <Route path='detail/*' element={<DetailPage />} />
+        {/* <Route path='search/*' element={<SearchPage />} /> */}
       </Routes>
     </ThemeProvider>
   );

@@ -1,9 +1,9 @@
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled, { keyframes } from 'styled-components';
-import { PokeMonData } from '../atom';
+import { PokeMonData } from '@atom/main/atom';
 
-const Detail = () => {
+const DetailPage = () => {
   const Navigate = useNavigate();
   /** url 의 정보를 가져옴 */
   const matchId = useMatch('/detail/:id');
@@ -56,7 +56,7 @@ const Detail = () => {
     </DetailSection>
   );
 };
-export default Detail;
+export default DetailPage;
 
 const DetailSection = styled.section`
   width: 100%;

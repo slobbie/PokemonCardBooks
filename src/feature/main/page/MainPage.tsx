@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled, { keyframes } from 'styled-components';
-import { PokeMonData, isLoading } from '../atom';
-import Cards from '../components/Card';
-import Filter from '../components/filter';
-import MarginBottom from '../components/layout/margin-bottom copy';
-import { ReactComponent as Spinner } from '../assets/spinner.svg';
+import { PokeMonData, isLoading } from '@atom/main/atom';
+import Cards from '@feature/main/components/Card';
+import Filter from '@feature/main/components/filter';
+import { ReactComponent as Spinner } from '../../../assets/spinner.svg';
 import { useLocation } from 'react-router-dom';
+import MarginModel from '@src/common/components/marginModel/MarginModel';
 
 /** 메인 홈 페이지 */
-const Home = () => {
+const MainPage = () => {
   const path = useLocation();
 
   /** 스토어에 데이터 저장 함수 */
@@ -101,27 +101,27 @@ const Home = () => {
   return (
     <Section>
       <Filter />
-      <MarginBottom margin={20} />
-      <MarginBottom margin={50} />
+      <MarginModel bottom={20} />
+      <MarginModel bottom={50} />
       <CardBox>
         <Cards
           pokeMonData={FilterData.length > 0 ? FilterData : pokemonData}
           ref={scrollEnd}
         />
       </CardBox>
-      <MarginBottom margin={50} />
+      <MarginModel bottom={50} />
       {/* TODO: 어떤식으로 로딩 처리 할지에 대한 고민 */}
       {loading ? (
         <Loader>
           <Spinner width={50} height={50} fill='#fff' className='Loader' />
         </Loader>
       ) : null}
-      <MarginBottom margin={50} />
+      <MarginModel bottom={50} />
     </Section>
   );
 };
 
-export default Home;
+export default MainPage;
 
 const Section = styled.section`
   max-width: 1200px;

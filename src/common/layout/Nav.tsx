@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import * as NavStyle from '@common/layout/style/nav.style';
 // import { Theme } from '@atom/main/atom';
 
+/** 네비게이션바 */
 const Nav = () => {
   // const [toggle, setToggle] = useState(false); // Toggle switch 를 관리하는 상태
   // const setDarkAtom = useSetRecoilState(Theme);

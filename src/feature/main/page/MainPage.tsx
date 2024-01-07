@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { PokeMonData, isLoading } from '@atom/main/atom';
 import Cards from '@feature/main/components/Card';
@@ -8,6 +14,13 @@ import { useLocation } from 'react-router-dom';
 import MarginModel from '@src/common/components/marginModel/MarginModel';
 import * as MainStyles from '@feature/main/styles/mainPage.style';
 import services from '@constants/index';
+import {
+  IFlavorTextEntries,
+  IGetPokeCountUrlResult,
+  IPokeMonsterDetailData,
+  PokeMonsterData,
+} from '@src/common/interface/pokemon.interface';
+
 /** 메인 홈 페이지 */
 const MainPage = () => {
   const path = useLocation();
@@ -22,46 +35,91 @@ const MainPage = () => {
   const scrollEnd = useRef<HTMLDivElement | null>(null);
 
   /** 로딩 상태 */
-  // const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useRecoilState(isLoading);
 
   /** 한번에 보여줄 데이터 수량 */
   const [count, setCount] = useState(100);
 
+  /** 호출 api에 대한 count url 반환 */
+  const getPokeCountUrl = async (
+    pCount: number
+  ): Promise<IGetPokeCountUrlResult> => {
+    const getUrl = await fetch(`${services.apiServices.url.pokeApi}${pCount}`);
+    const CountUrlJson = await getUrl.json();
+    const results: IGetPokeCountUrlResult = CountUrlJson;
+    return results;
+  };
+
+  /** 포켓몬스터 각각의 데이터를 얻을수 있음 */
+  const getPokeMonsterData = async (pUrl: string): Promise<PokeMonsterData> => {
+    const pokemonRes = await fetch(pUrl);
+    const pokemonMonsterJson: PokeMonsterData = await pokemonRes.json();
+
+    return pokemonMonsterJson;
+  };
+
+  /** 몬스터에 대한 디테일 데이터 호출 */
+  const getPokeMonsterDetail = async (
+    pUrl: string
+  ): Promise<IPokeMonsterDetailData> => {
+    const detailRes = await fetch(pUrl);
+    const detailJson: IPokeMonsterDetailData = await detailRes.json();
+    return detailJson;
+  };
+
   /** 포켓몬 데이터 호출 */
   const fetchPokemons = useCallback(
     async (pCount: number) => {
-      const res = await fetch(`${services.apiServices.url.pokeApi}${pCount}`);
-      const json = await res.json();
-      const { results } = json;
-      setLoading(true);
-      const pokemonItem = await Promise.all(
-        results.map(async ({ url }: any) => {
-          const pokemonRes = await fetch(url);
-          const pokemonJson = await pokemonRes.json();
-          const detailUrl = pokemonJson.species.url;
-          const detailRes = await fetch(detailUrl);
-          const detailJson = await detailRes.json();
-          return {
-            id: pokemonJson.id,
-            name: detailJson.names[2].name,
-            img: pokemonJson.sprites.other['official-artwork'].front_default,
-            front_img: pokemonJson.sprites.front_default,
-            back_img: pokemonJson.sprites.back_default,
-            type: pokemonJson.types[0].type.name,
-            color: detailJson.color.name,
-            text: detailJson.flavor_text_entries[23].flavor_text,
-            genera: detailJson.genera[1].genus,
-            height: pokemonJson.height,
-            weight: pokemonJson.weight,
-          };
-        })
-      );
-      /** 새로운 포멧몬 데이터 업데이트 */
-      setPokeMonData(pokemonItem);
-      setLoading(false);
+      try {
+        const getCountUrl = await getPokeCountUrl(pCount);
+        setLoading(true);
+        const pokemonItem = await Promise.all(
+          getCountUrl.results.map(async ({ url }: any) => {
+            const monsterData = await getPokeMonsterData(url);
+
+            const monsterDetailData = await getPokeMonsterDetail(
+              monsterData.species.url
+            );
+
+            /** 포켓몬 이름 */
+            const pokemonName = monsterDetailData.names.find((item) => {
+              return item.language.name === 'ko';
+            })?.name;
+
+            /** 포켓몬 설명 */
+            const flavorText: IFlavorTextEntries =
+              monsterDetailData.flavor_text_entries.find((item) => {
+                return item.language.name === 'ko';
+              })!;
+
+            /** 포켓몬 타입 */
+            const pokemonGenera = monsterDetailData.genera.find((item) => {
+              return item.language.name === 'ko';
+            })!;
+            return {
+              id: monsterData.id,
+              name: pokemonName,
+              img: monsterData.sprites.other['official-artwork'].front_default,
+              front_img: monsterData.sprites.front_default,
+              back_img: monsterData.sprites.back_default,
+              type: monsterData.types[0].type.name,
+              color: monsterDetailData.color.name,
+              text: flavorText.flavor_text,
+              genera: pokemonGenera.genus,
+              height: monsterData.height,
+              weight: monsterData.weight,
+            };
+          })
+        );
+        /** 새로운 포멧몬 데이터 업데이트 */
+        setPokeMonData(pokemonItem);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     },
-    [setPokeMonData]
+    [setLoading, setPokeMonData]
   );
 
   /** 페이지의 하단으로 진입할때 몇개의 데이터를 더 보여줄지설정 */
@@ -70,10 +128,11 @@ const MainPage = () => {
   };
 
   /** 데이터 호출  */
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchPokemons(count);
   }, [count]);
 
+  /** 무한 스크롤 이팩팅 */
   useEffect(() => {
     if (!loading) {
       const observer = new IntersectionObserver(
@@ -99,8 +158,7 @@ const MainPage = () => {
   return (
     <MainStyles.Section>
       <Filter />
-      <MarginModel bottom={20} />
-      <MarginModel bottom={50} />
+      <MarginModel bottom={70} />
       <MainStyles.CardBox>
         <Cards
           pokeMonData={FilterData.length > 0 ? FilterData : pokemonData}

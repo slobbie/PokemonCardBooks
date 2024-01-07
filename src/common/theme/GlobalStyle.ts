@@ -1,46 +1,6 @@
-import { darkTheme, lightTheme } from './common/theme/theme';
-import styled, { ThemeProvider } from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
-import { Route, Routes } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { Theme } from '@atom/main/atom';
-import Nav from '@src/common/layout/Nav';
-import Search from '@feature/main/components/Search';
-import MainPage from '@feature/main/page/MainPage';
-import DetailPage from '@src/feature/main/page/DetailPage';
-import path from '@constants/index';
-// import SearchPage from '@feature/search/SearchPage';
 
-function App() {
-  const ThemeColor = useRecoilValue(Theme);
-  return (
-    <ThemeProvider theme={ThemeColor ? darkTheme : lightTheme}>
-      <GlobalStyle />
-      <Section>
-        <Nav />
-        <Search />
-      </Section>
-      <Routes>
-        <Route path={`${path.router.main}*`} element={<MainPage />} />
-        <Route path={`${path.router.detail}/*`} element={<DetailPage />} />
-        {/* <Route path='search/*' element={<SearchPage />} /> */}
-      </Routes>
-    </ThemeProvider>
-  );
-}
-
-export default App;
-
-const Section = styled.div`
-  max-width: 1200px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 auto;
-`;
-
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,

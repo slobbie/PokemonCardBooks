@@ -24,7 +24,12 @@ const Cards = (
             <Link to={`${path.router.detail}/${item.id}`} key={item.id}>
               <CardStyle.Card color={item.color}>
                 <CardStyle.Name>
-                  <img className='ball' src={PokeBall} alt='포켓볼사진' />
+                  <img
+                    className='ball'
+                    src={PokeBall}
+                    alt='포켓볼사진'
+                    loading='lazy'
+                  />
                   <p className='number'> No.{item.id}</p>
                 </CardStyle.Name>
                 <CardStyle.Img src={item.img} />

@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"],
+      "@router/*": ["src/router/*"],
       "@assets/*": ["src/assets/*"],
       "@common/*": ["src/common/*"],
       "@constants/*": ["src/common/constants/*"],

@@ -1,64 +1,6 @@
-import { useMatch, useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import styled, { keyframes } from 'styled-components';
-import { PokeMonData } from '../atom';
 
-const Detail = () => {
-  const Navigate = useNavigate();
-  /** url 의 정보를 가져옴 */
-  const matchId = useMatch('/detail/:id');
-
-  /** 뒤로가기 이벤트 */
-  const onBackClick = () => {
-    Navigate(`/`);
-  };
-
-  /** 저장된 포켓몬 데이터 */
-  const pokemonData = useRecoilValue(PokeMonData);
-
-  /** 선택한 포멧몬 디테일 데이터 */
-  const clickedData =
-    matchId?.params.id &&
-    pokemonData?.find((item) => item.id + '' === matchId.params.id);
-
-  return (
-    <DetailSection>
-      <MiniImgBox>
-        {clickedData && (
-          <>
-            <MiniImg className='miniImg front' src={clickedData?.front_img} />
-            <MiniImg className='miniImg back' src={clickedData?.back_img} />
-          </>
-        )}
-      </MiniImgBox>
-      <DetailBox>
-        {clickedData && (
-          <>
-            <Top>
-              <Circle className='Circle' color={clickedData.color} />
-              <h3 className='number'>No.{clickedData?.id}</h3>
-              <p className='Type'>Type : {clickedData?.type}</p>
-            </Top>
-
-            <ImgBox color={clickedData.color}>
-              <Img src={clickedData.img} />
-            </ImgBox>
-
-            <TextBox>
-              <p className='name'>{clickedData?.name}</p>
-              <p className='pokemonType'>{clickedData?.genera}</p>
-              <p>{clickedData?.text}</p>
-            </TextBox>
-          </>
-        )}
-      </DetailBox>
-      <Btn onClick={onBackClick}>Back</Btn>
-    </DetailSection>
-  );
-};
-export default Detail;
-
-const DetailSection = styled.section`
+export const DetailSection = styled.section`
   width: 100%;
   height: 90vh;
   display: flex;
@@ -68,7 +10,7 @@ const DetailSection = styled.section`
   margin: 0 auto;
 `;
 
-const DetailBox = styled.div`
+export const DetailBox = styled.div`
   height: 500px;
   width: 500px;
   background-color: #fff;
@@ -82,7 +24,7 @@ const DetailBox = styled.div`
   }
 `;
 
-const Top = styled.div`
+export const Top = styled.div`
   width: 100%;
   margin-top: 30px;
   display: flex;
@@ -114,7 +56,7 @@ const Top = styled.div`
   }
 `;
 
-const Circle = styled.span`
+export const Circle = styled.span`
   width: 10px;
   height: 10px;
   border-radius: 10px;
@@ -123,7 +65,7 @@ const Circle = styled.span`
   left: 10px;
 `;
 
-const ImgBox = styled.div`
+export const ImgBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,14 +80,14 @@ const ImgBox = styled.div`
   }
 `;
 
-const Img = styled.img`
+export const Img = styled.img`
   width: 150px;
   @media screen and (max-width: 768px) {
     width: 100px;
   }
 `;
 
-const animate = keyframes`
+export const animate = keyframes`
    0% {
 
       transform: translateX(0);
@@ -162,7 +104,7 @@ const animate = keyframes`
     }
 `;
 
-const animate2 = keyframes`
+export const animate2 = keyframes`
    0% {
 
       transform: translateX(0);
@@ -179,7 +121,7 @@ const animate2 = keyframes`
     }
 `;
 
-const MiniImgBox = styled.div`
+export const MiniImgBox = styled.div`
   display: flex;
   width: 50%;
   justify-content: space-around;
@@ -193,7 +135,7 @@ const MiniImgBox = styled.div`
   }
 `;
 
-const MiniImg = styled.img`
+export const MiniImg = styled.img`
   width: 100px;
   margin-left: 20px;
   margin-right: 20px;
@@ -201,7 +143,7 @@ const MiniImg = styled.img`
   animation-delay: 0s;
 `;
 
-const TextBox = styled.div`
+export const TextBox = styled.div`
   font-family: 'Poor Story', cursive;
   width: 50%;
   .name {
@@ -216,7 +158,7 @@ const TextBox = styled.div`
   }
 `;
 
-const Btn = styled.button`
+export const Btn = styled.button`
   font-family: 'Press Start 2P', cursive;
   margin-top: 20px;
   border: none;

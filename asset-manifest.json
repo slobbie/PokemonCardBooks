@@ -1,12 +1,11 @@
 {
   "files": {
-    "main.js": "/PokemonCardBooks/static/js/main.44e62874.js",
-    "static/media/spinner.svg": "/PokemonCardBooks/static/media/spinner.8fadece8961911e8da799d887e06aa3f.svg",
+    "main.js": "/PokemonCardBooks/static/js/main.87ed801e.js",
     "index.html": "/PokemonCardBooks/index.html",
     "static/media/pokeball.svg": "/PokemonCardBooks/static/media/pokeball.5a279cb63c79df238278cb85fd19378c.svg",
-    "main.44e62874.js.map": "/PokemonCardBooks/static/js/main.44e62874.js.map"
+    "main.87ed801e.js.map": "/PokemonCardBooks/static/js/main.87ed801e.js.map"
   },
   "entrypoints": [
-    "static/js/main.44e62874.js"
+    "static/js/main.87ed801e.js"
   ]
 }

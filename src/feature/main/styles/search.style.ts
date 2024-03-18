@@ -2,12 +2,14 @@ import styled from 'styled-components';
 
 export const SearchBar = styled.div`
   max-width: 1200px;
+  max-height: 50px;
   width: 100%;
 `;
 
 export const Warper = styled.div`
-  max-width: 880px;
+  max-width: calc(1200px - 40px);
   width: 100%;
+  height: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -17,7 +19,7 @@ export const Warper = styled.div`
   overflow: hidden;
   background-color: ${(theme) => theme.theme.bg_fff};
   @media screen and (max-width: 768px) {
-    flex-direction: column;
+    width: 90%;
   }
 `;
 
@@ -54,10 +56,10 @@ export const BtnBox = styled.div`
   align-items: center;
   width: 100px;
   justify-content: space-around;
-  @media screen and (max-width: 768px) {
+  /* @media screen and (max-width: 768px) {
     width: 100%;
     margin: 30px 0 auto;
-  }
+  } */
 `;
 
 export const SearchIcon = styled.img`

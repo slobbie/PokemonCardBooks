@@ -10,18 +10,18 @@ export const FilterBox = styled.div`
 
 export const ItemBox = styled.div`
   display: grid;
-  grid-template-columns: repeat(8, 0fr);
-  max-width: 880px;
+  grid-template-columns: repeat(8, 1fr);
+  max-width: 1200px;
   width: 100%;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   justify-items: center;
   @media screen and (max-width: 768px) {
-    grid-template-columns: repeat(6, 0fr);
+    grid-template-columns: repeat(5, 0fr);
   }
   @media screen and (max-width: 425px) {
-    grid-template-columns: repeat(3, 0fr);
+    grid-template-columns: repeat(4, 0fr);
   }
 `;
 
@@ -39,6 +39,12 @@ export const TypeBtn = styled.button`
   font-family: 'Press Start 2P';
   -webkit-transition: all 250ms linear;
   transition: all 250ms linear;
+
+  @media screen and (max-width: 425px) {
+    width: 80px;
+    height: 40px;
+    font-size: 8px;
+  }
 
   cursor: pointer;
   &:hover() {

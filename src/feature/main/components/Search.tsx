@@ -26,7 +26,8 @@ const Search = () => {
   /** 검색 이벤트 */
   const onSearch = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    const searchData = pokemonData.filter(({ name }) => name === search);
+    const searchData = pokemonData.filter(({ name }) => name?.includes(search));
+
     if (searchData) {
       setSearchData(searchData);
       navigate(`/search/${searchData[0].name}`);
@@ -43,10 +44,6 @@ const Search = () => {
       onSearch(e);
     }
   };
-
-  // const onReset = (e: React.MouseEvent<HTMLElement>) => {
-  //   setToggleValue(false);
-  // };
 
   return (
     <SearchStyle.SearchBar>

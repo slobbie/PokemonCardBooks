@@ -1,4 +1,3 @@
-import React from 'react';
 import Cards from '@feature/main/components/Card';
 import { useRecoilValue } from 'recoil';
 import { SearchData } from '@atom/main/atom';
@@ -46,7 +45,7 @@ const ContentBox = styled.div`
   margin-top: 50px;
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `;
 

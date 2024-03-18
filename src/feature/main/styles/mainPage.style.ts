@@ -18,6 +18,7 @@ export const CardBox = styled.div`
   grid-template-columns: repeat(5, 1fr);
   gap: 15px;
   justify-content: space-around;
+  justify-items: center;
   align-items: center;
   @media screen and (max-width: 768px) {
     grid-template-columns: repeat(3, 1fr);

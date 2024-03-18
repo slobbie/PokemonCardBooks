@@ -9,8 +9,6 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { PokeMonData, isLoading } from '@atom/main/atom';
 import Cards from '@feature/main/components/Card';
 import Filter from '@src/feature/main/components/TypeFilter';
-import { ReactComponent as Spinner } from '@assets/spinner.svg';
-import { useLocation } from 'react-router-dom';
 import MarginModel from '@src/common/components/marginModel/MarginModel';
 import * as MainStyles from '@feature/main/styles/mainPage.style';
 import services from '@constants/index';
@@ -18,13 +16,12 @@ import {
   IFlavorTextEntries,
   IGetPokeCountUrlResult,
   IPokeMonsterDetailData,
+  PokeMonDataInterface,
   PokeMonsterData,
 } from '@src/common/interface/pokemon.interface';
 
 /** 메인 홈 페이지 */
 const MainPage = () => {
-  const path = useLocation();
-
   /** 스토어에 데이터 저장 함수 */
   const setPokeMonData = useSetRecoilState(PokeMonData);
 
@@ -37,8 +34,11 @@ const MainPage = () => {
   /** 로딩 상태 */
   const [loading, setLoading] = useRecoilState(isLoading);
 
-  /** 한번에 보여줄 데이터 수량 */
-  const [count, setCount] = useState(100);
+  /** 한번에 보여줄 데이터 수량 100 */
+  const [count, setCount] = useState(50);
+
+  /** 검색 상태  */
+  const [searchData, setSearchData] = useState<PokeMonDataInterface[]>([]);
 
   /** 호출 api에 대한 count url 반환 */
   const getPokeCountUrl = async (
@@ -70,9 +70,9 @@ const MainPage = () => {
   /** 포켓몬 데이터 호출 */
   const fetchPokemons = useCallback(
     async (pCount: number) => {
+      setLoading(true);
       try {
         const getCountUrl = await getPokeCountUrl(pCount);
-        setLoading(true);
         const pokemonItem = await Promise.all(
           getCountUrl.results.map(async ({ url }: any) => {
             const monsterData = await getPokeMonsterData(url);
@@ -149,29 +149,27 @@ const MainPage = () => {
     }
   }, [loading]);
 
-  /** url 에서 선택한 타입을 가져와줌 */
-  const FilterType = path.pathname.replace('/', '');
-
-  /** 선택한 타입을 필터링한 데이터 */
-  const FilterData = pokemonData.filter((type) => type.type === FilterType);
+  /** 필터에서 선택한 type 을 받아오는 콜백 */
+  const findTypeMonsterCallback = (pType: string) => {
+    const filterData = pokemonData.filter((poke) => poke.type === pType);
+    if (pType === 'all') {
+      setSearchData([]);
+    }
+    setSearchData(filterData);
+    setLoading(false);
+  };
 
   return (
     <MainStyles.Section>
-      <Filter />
+      <Filter findTypeMonsterCallback={findTypeMonsterCallback} />
       <MarginModel bottom={70} />
       <MainStyles.CardBox>
         <Cards
-          pokeMonData={FilterData.length > 0 ? FilterData : pokemonData}
+          pokeMonData={searchData.length > 0 ? searchData : pokemonData}
           ref={scrollEnd}
         />
       </MainStyles.CardBox>
       <MarginModel bottom={50} />
-      {/* TODO: 어떤식으로 로딩 처리 할지에 대한 고민 */}
-      {loading ? (
-        <MainStyles.Loader>
-          <Spinner width={50} height={50} fill='#fff' className='Loader' />
-        </MainStyles.Loader>
-      ) : null}
       <MarginModel bottom={50} />
     </MainStyles.Section>
   );

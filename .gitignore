@@ -4,12 +4,19 @@
 /node_modules
 /.pnp
 .pnp.js
+/.yarn/cache
+/.yarn/unplugged
+/.yarn/build-state.yml
+/.yarn/install-state.gz
+/.yarn/sdks
 
 # testing
 /coverage
 
 # production
 /build
+/.next/
+/out/
 
 # misc
 .DS_Store

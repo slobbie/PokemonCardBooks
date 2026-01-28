@@ -1,0 +1,43 @@
+/** 포켓몬 타입별 UI 테마 색상 정의 (그라데이션 및 그림자 효과) */
+export const TYPE_COLORS: Record<string, string> = {
+  fire: 'from-red-400 to-red-600 shadow-red-500/40',
+  water: 'from-blue-400 to-blue-600 shadow-blue-500/40',
+  grass: 'from-green-400 to-green-600 shadow-green-500/40',
+  electric: 'from-yellow-300 to-yellow-500 shadow-yellow-500/40 text-black',
+  psychic: 'from-pink-400 to-pink-600 shadow-pink-500/40',
+  dragon: 'from-violet-400 to-indigo-600 shadow-indigo-500/40',
+  normal: 'from-gray-300 to-gray-500 shadow-gray-400/40 text-black',
+  fighting: 'from-orange-600 to-red-800 shadow-orange-700/40',
+  flying: 'from-indigo-300 to-indigo-500 shadow-indigo-400/40',
+  poison: 'from-purple-400 to-purple-700 shadow-purple-600/40',
+  ground: 'from-yellow-600 to-yellow-800 shadow-yellow-700/40',
+  rock: 'from-stone-500 to-stone-700 shadow-stone-600/40',
+  bug: 'from-lime-400 to-lime-600 shadow-lime-500/40',
+  ghost: 'from-slate-600 to-indigo-900 shadow-indigo-800/40',
+  steel: 'from-gray-400 to-gray-600 shadow-gray-500/40',
+  ice: 'from-cyan-300 to-cyan-500 shadow-cyan-400/40 text-black',
+  dark: 'from-gray-700 to-black shadow-gray-800/40',
+  fairy: 'from-pink-300 to-pink-500 shadow-pink-400/40 text-black',
+};
+
+/** 포켓몬 타입별 카드 배경 글로우(Glow) 효과 정의 */
+export const TYPE_GLOWS: Record<string, string> = {
+  fire: 'bg-red-500/20 group-hover:bg-red-500/30',
+  water: 'bg-blue-500/20 group-hover:bg-blue-500/30',
+  grass: 'bg-green-500/20 group-hover:bg-green-500/30',
+  electric: 'bg-yellow-500/20 group-hover:bg-yellow-500/30',
+  psychic: 'bg-pink-500/20 group-hover:bg-pink-500/30',
+  dragon: 'bg-indigo-500/20 group-hover:bg-indigo-500/30',
+  normal: 'bg-gray-400/20 group-hover:bg-gray-400/30',
+  fighting: 'bg-orange-600/20 group-hover:bg-orange-600/30',
+  flying: 'bg-indigo-400/20 group-hover:bg-indigo-400/30',
+  poison: 'bg-purple-600/20 group-hover:bg-purple-600/30',
+  ground: 'bg-yellow-700/20 group-hover:bg-yellow-700/30',
+  rock: 'bg-stone-600/20 group-hover:bg-stone-600/30',
+  bug: 'bg-lime-500/20 group-hover:bg-lime-500/30',
+  ghost: 'bg-indigo-800/20 group-hover:bg-indigo-800/30',
+  steel: 'bg-gray-500/20 group-hover:bg-gray-500/30',
+  ice: 'bg-cyan-400/20 group-hover:bg-cyan-400/30',
+  dark: 'bg-gray-800/20 group-hover:bg-gray-800/30',
+  fairy: 'bg-pink-400/20 group-hover:bg-pink-400/30',
+};

@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 5 5 5;
+    --foreground: 255 255 255;
+  }
+
+  body {
+    @apply bg-[#050505] text-white selection:bg-purple-500 selection:text-white antialiased;
+    font-family: 'Satoshi', sans-serif;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.15), transparent 25%), 
+        radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.1), transparent 25%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply backdrop-blur-[20px] border border-white/10 bg-white/[0.02];
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .shine-effect {
+    @apply absolute inset-0 pointer-events-none z-20 transition-transform duration-700;
+    background: linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.0) 50%);
+    transform: skewX(-20deg) translateX(-150%);
+  }
+
+  .group:hover .shine-effect {
+    transform: skewX(-20deg) translateX(150%);
+  }
+}

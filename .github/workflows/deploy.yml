@@ -40,14 +40,16 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        with:
-          static_site_generator: next
 
       - name: Install dependencies
         run: yarn install --immutable
 
       - name: Build with Next.js
-        run: yarn next build
+        run: |
+          yarn next build
+          echo "Build completed, checking out folder:"
+          ls -la
+          ls -la out || echo "out folder does not exist"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

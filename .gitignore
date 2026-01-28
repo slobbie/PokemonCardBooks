@@ -9,6 +9,9 @@
 /.yarn/build-state.yml
 /.yarn/install-state.gz
 /.yarn/sdks
+!/.yarn/releases
+!/.yarn/plugins
+!/.yarn/patches
 
 # testing
 /coverage

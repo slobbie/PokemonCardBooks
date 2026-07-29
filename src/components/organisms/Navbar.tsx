@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useMyDeckStore } from '@/store/useMyDeckStore';
 import DeckDrawer from '@/components/organisms/DeckDrawer';
-import { useSearchStore } from '@/store/useSearchStore';
+import { usePokemonFilterStore } from '@/features/pokemon-filter/model/pokemonFilterStore';
 import NavLogo from '@/components/molecules/NavLogo';
 import NavSearchBar from '@/components/molecules/NavSearchBar';
 import NavActions from '@/components/molecules/NavActions';
@@ -20,7 +20,7 @@ const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   /** 검색 및 언어 설정을 관리하는 전역 스토어 사용 */
   const { searchQuery, setSearchQuery, language, setLanguage } =
-    useSearchStore();
+    usePokemonFilterStore();
 
   /** 현재 언어 설정을 한국어 <-> 영어로 토글하는 함수 */
   const handleLanguageToggle = () => {

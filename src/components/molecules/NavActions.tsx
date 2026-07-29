@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Languages, Layers } from 'lucide-react';
-import { TLanguage } from '@/store/useSearchStore';
+import { TLanguage } from '@/features/pokemon-filter/model/pokemonFilterStore';
 import IconButton from '@/components/atoms/IconButton';
 import Button from '@/components/atoms/Button';
 

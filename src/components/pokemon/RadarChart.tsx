@@ -60,11 +60,11 @@ const RadarChart = ({ stats, chartColor = '#a855f7' }: IProps) => {
   const gridLevels = [0.2, 0.4, 0.6, 0.8, 1];
 
   return (
-    <div className='relative flex items-center justify-center w-full aspect-square max-w-[400px] mx-auto'>
+    <div className='relative mx-auto aspect-square h-full max-h-[250px] w-full max-w-[250px]'>
       <svg
-        width={CANVAS_SIZE}
-        height={CANVAS_SIZE}
-        className='overflow-visible'
+        viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`}
+        className='h-full w-full overflow-visible'
+        aria-hidden='true'
       >
         {/* 그리드 가이드라인 배경 */}
         {gridLevels.map((level) => (

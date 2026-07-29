@@ -1,17 +1,2 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { IPokemon } from '@/types/pokemon';
-import { pokemonApi } from '@/api/services/pokemon/pokemonApi';
-
-/**
- * 포켓몬 상세 조회 훅
- * @param idOrName 포켓몬 ID 또는 이름
- */
-export const usePokemonDetail = (
-  idOrName: string | number,
-): UseQueryResult<IPokemon, Error> => {
-  return useQuery({
-    queryKey: ['pokemon', 'detail', idOrName],
-    queryFn: () => pokemonApi.getPokemonDetail.execute(idOrName),
-    enabled: !!idOrName,
-  });
-};
+// 기존 import 경로를 사용하는 코드와의 호환성을 유지합니다.
+export { usePokemonDetail } from '@/entities/pokemon/api/usePokemonDetail';

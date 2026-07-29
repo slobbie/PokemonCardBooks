@@ -3,7 +3,11 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { TYPE_COLORS } from '@/lib/constants';
-import { useSearchStore, TSortOption } from '@/store/useSearchStore';
+import {
+  TSortOption,
+  usePokemonFilterStore,
+} from '@/features/pokemon-filter/model/pokemonFilterStore';
+import { POKEMON_TYPES } from '@/features/pokemon-filter/config/pokemonFilterOptions';
 import { motion } from 'framer-motion';
 import {
   ArrowDownAZ,
@@ -14,27 +18,6 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import Button from '@/components/atoms/Button';
-
-const types = [
-  'fire',
-  'water',
-  'grass',
-  'electric',
-  'psychic',
-  'dragon',
-  'normal',
-  'fighting',
-  'flying',
-  'poison',
-  'ground',
-  'rock',
-  'bug',
-  'ghost',
-  'steel',
-  'ice',
-  'dark',
-  'fairy',
-];
 
 /**
  * 포켓몬 목록 필터 및 정렬 바
@@ -49,7 +32,7 @@ const FilterBar = () => {
     setSortBy,
     showFavoritesOnly,
     setShowFavoritesOnly,
-  } = useSearchStore();
+  } = usePokemonFilterStore();
 
   /** 언어별 UI 텍스트 설정 */
   const t = {
@@ -152,7 +135,7 @@ const FilterBar = () => {
         >
           {t.allTypes}
         </Button>
-        {types.map((type) => {
+        {POKEMON_TYPES.map((type) => {
           const isSelected = selectedType === type;
           return (
             <motion.button

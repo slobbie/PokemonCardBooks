@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Sparkles, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { IEvolutionDetail } from '@/types/pokemon';
+import { IEvolutionDetail } from '@/entities/pokemon/model/types';
 
 /**
  * 포켓몬 진화 과정 시각화 섹션

@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { usePokemonDetail } from '@/hooks/pokemon/usePokemonDetail';
+import { usePokemonDetail } from '@/entities/pokemon/api/usePokemonDetail';
 import Navbar from '@/components/organisms/Navbar';
 import { TYPE_GLOWS } from '@/lib/constants';
-import { useSearchStore } from '@/store/useSearchStore';
+import { usePokemonFilterStore } from '@/features/pokemon-filter/model/pokemonFilterStore';
 import { PokemonDetailSkeleton } from '@/components/pokemon/PokemonDetailSkeleton';
 import Button from '@/components/atoms/Button';
 import { ArrowLeft } from 'lucide-react';
@@ -31,7 +31,7 @@ const PokemonDetailClient = () => {
   } = usePokemonDetail(pokemonIdOrName);
 
   const [isShinyDisplay, setIsShinyDisplay] = useState(false);
-  const { language: currentLanguage } = useSearchStore();
+  const { language: currentLanguage } = usePokemonFilterStore();
 
   const translationWord = {
     ko: {
@@ -81,18 +81,20 @@ const PokemonDetailClient = () => {
         </Button>
 
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-start'>
-          <PokemonVisuals
-            pokemonId={fetchedPokemon.id}
-            pokemonName={fetchedPokemon.name}
-            defaultImage={fetchedPokemon.image}
-            glowColor={glowThemeColor}
-            isShiny={isShinyDisplay}
-            onToggleShiny={() => setIsShinyDisplay(!isShinyDisplay)}
-            labels={{
-              shiny: translationWord.shinyMode,
-              normal: translationWord.normalMode,
-            }}
-          />
+          <div className='lg:sticky lg:top-24'>
+            <PokemonVisuals
+              pokemonId={fetchedPokemon.id}
+              pokemonName={fetchedPokemon.name}
+              defaultImage={fetchedPokemon.image}
+              glowColor={glowThemeColor}
+              isShiny={isShinyDisplay}
+              onToggleShiny={() => setIsShinyDisplay(!isShinyDisplay)}
+              labels={{
+                shiny: translationWord.shinyMode,
+                normal: translationWord.normalMode,
+              }}
+            />
+          </div>
 
           <div className='space-y-8'>
             <PokemonInfo

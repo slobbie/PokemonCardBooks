@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { IPokemon } from '@/types/pokemon';
+import { IPokemon } from '@/entities/pokemon/model/types';
 
 interface IMyDeckState {
   deck: IPokemon[];

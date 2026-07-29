@@ -8,12 +8,12 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useMyDeckStore } from '@/store/useMyDeckStore';
 import { useFavoritesStore } from '@/store/useFavoritesStore';
-import { useSearchStore } from '@/store/useSearchStore';
+import { usePokemonFilterStore } from '@/features/pokemon-filter/model/pokemonFilterStore';
 import { useRouter } from 'next/navigation';
 import StatBox from '@/components/molecules/StatBox';
 import Badge from '@/components/atoms/Badge';
 import IconButton from '@/components/atoms/IconButton';
-import { IPokemon } from '@/types/pokemon';
+import { IPokemon } from '@/entities/pokemon/model/types';
 
 /**
  * 개별 포켓몬 카드 컴포넌트
@@ -29,7 +29,7 @@ const PokemonCard = ({ pokemon }: IProps) => {
   /** 즐겨찾기 상태 및 함수 가져오기 */
   const { toggleFavorite, isFavorite } = useFavoritesStore();
   /** 현재 언어 설정 가져오기 */
-  const { language } = useSearchStore();
+  const { language } = usePokemonFilterStore();
 
   /** 현재 포켓몬이 덱에 포함되어 있는지 확인 */
   const isSelected = isInDeck(id);
@@ -39,6 +39,7 @@ const PokemonCard = ({ pokemon }: IProps) => {
 
   /**설정된 언어에 따라 표시할 이름 결정 */
   const displayName = language === 'ko' && kr_name ? kr_name : name;
+  const statsLabel = language === 'ko' ? '기본 능력치' : 'Base Stats';
 
   /** 덱 추가/제거 토글 핸들러 */
   const handleToggleDeck = (e: React.MouseEvent) => {
@@ -64,10 +65,15 @@ const PokemonCard = ({ pokemon }: IProps) => {
   const glowColor = TYPE_GLOWS[mainType] || 'bg-gray-500/20';
 
   return (
-    <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} scale={1.02} className='h-full'>
+    <Tilt
+      tiltMaxAngleX={10}
+      tiltMaxAngleY={10}
+      scale={1.02}
+      className='h-full min-w-0'
+    >
       <div
         onClick={() => router.push(`/pokemon/${id}`)}
-        className='glass-card rounded-3xl p-5 relative group overflow-hidden flex flex-col h-full cursor-pointer'
+        className='glass-card rounded-3xl p-5 pb-6 relative group overflow-hidden flex flex-col h-full min-w-0 cursor-pointer'
       >
         <div className='shine-effect'></div>
         <div
@@ -115,13 +121,13 @@ const PokemonCard = ({ pokemon }: IProps) => {
           </div>
         </div>
 
-        <div className='flex-1 flex items-center justify-center relative my-2'>
+        <div className='relative my-2 flex min-h-0 flex-1 items-center justify-center'>
           <Image
             src={image}
             alt={name}
             width={160}
             height={160}
-            className='object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-300'
+            className='h-auto max-h-[150px] w-auto max-w-full object-contain drop-shadow-xl transition-transform duration-300 group-hover:scale-110'
             priority={id <= 20}
           />
         </div>
@@ -132,10 +138,15 @@ const PokemonCard = ({ pokemon }: IProps) => {
             {displayName}
           </h3>
 
-          <div className='flex gap-2 mt-3'>
-            <StatBox label='ATK' value={stats.atk} />
-            <StatBox label='DEF' value={stats.def} />
-            <StatBox label='SPD' value={stats.spe} />
+          <div className='mt-5 border-t border-white/5 pt-4'>
+            <p className='mb-3 text-[10px] font-bold uppercase tracking-widest text-gray-500'>
+              {statsLabel}
+            </p>
+            <div className='flex min-w-0 gap-2'>
+              <StatBox label='ATK' value={stats.atk} />
+              <StatBox label='DEF' value={stats.def} />
+              <StatBox label='SPD' value={stats.spe} />
+            </div>
           </div>
         </div>
       </div>

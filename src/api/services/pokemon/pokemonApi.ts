@@ -1,6 +1,6 @@
 import { createApiWrapper } from '@/api/core/createApiWrapper';
 import { commonApi } from '@/api/core/commonApi';
-import { IPokemon, IEvolutionDetail } from '@/types/pokemon';
+import { IEvolutionDetail, IPokemon } from '@/entities/pokemon/model/types';
 
 /** 포켓몬 리스트 API 응답 인터페이스 */
 interface IPokemonListResponse {
@@ -26,6 +26,49 @@ interface IPokemonDetailResponse {
   weight: number;
 }
 
+interface IPokemonSpeciesResponse {
+  names: {
+    language: { name: string };
+    name: string;
+  }[];
+  evolution_chain: {
+    url: string;
+  };
+}
+
+interface IEvolutionChainNode {
+  species: {
+    name: string;
+    url: string;
+  };
+  evolves_to: IEvolutionChainNode[];
+}
+
+interface IEvolutionChainResponse {
+  chain: IEvolutionChainNode;
+}
+
+interface IPokemonCatalogGraphqlItem {
+  id: number;
+  name: string;
+  height: number;
+  weight: number;
+  pokemontypes: { type: { name: string } }[];
+  pokemonstats: { base_stat: number; stat: { name: string } }[];
+  pokemonabilities: { ability: { name: string } }[];
+  pokemonspecy: {
+    generation_id: number;
+    pokemonspeciesnames: { name: string }[];
+  };
+}
+
+interface IPokemonCatalogGraphqlResponse {
+  data?: {
+    pokemon: IPokemonCatalogGraphqlItem[];
+  };
+  errors?: { message: string }[];
+}
+
 /** 포켓몬 리스트 조회 파라미터 인터페이스 */
 interface IGetPokemonListParams {
   pageParam?: number;
@@ -36,6 +79,39 @@ interface IPokemonListResult {
   results: IPokemon[];
   nextCursor?: number;
 }
+
+const POKEAPI_GRAPHQL_URL = 'https://graphql.pokeapi.co/v1beta2';
+const POKEMON_CATALOG_LIMIT = 151;
+const POKEMON_CATALOG_QUERY = `
+  query PokemonCatalog($limit: Int!) {
+    pokemon(
+      limit: $limit
+      order_by: { id: asc }
+      where: { id: { _lte: $limit }, is_default: { _eq: true } }
+    ) {
+      id
+      name
+      height
+      weight
+      pokemontypes(order_by: { slot: asc }) {
+        type { name }
+      }
+      pokemonstats(order_by: { stat_id: asc }) {
+        base_stat
+        stat { name }
+      }
+      pokemonabilities(order_by: { slot: asc }) {
+        ability { name }
+      }
+      pokemonspecy {
+        generation_id
+        pokemonspeciesnames(where: { language_id: { _eq: 3 } }) {
+          name
+        }
+      }
+    }
+  }
+`;
 
 /**
  * 포켓몬 데이터 변환 함수
@@ -65,6 +141,35 @@ const transformPokemonData = (data: IPokemonDetailResponse): IPokemon => {
   };
 };
 
+const transformCatalogPokemon = (
+  pokemon: IPokemonCatalogGraphqlItem,
+): IPokemon => {
+  const stats = Object.fromEntries(
+    pokemon.pokemonstats.map(({ base_stat, stat }) => [stat.name, base_stat]),
+  );
+
+  return {
+    id: pokemon.id,
+    name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1),
+    kr_name: pokemon.pokemonspecy.pokemonspeciesnames[0]?.name,
+    types: pokemon.pokemontypes.map(({ type }) => type.name),
+    image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`,
+    shinyImage: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${pokemon.id}.png`,
+    stats: {
+      hp: stats.hp ?? 0,
+      atk: stats.attack ?? 0,
+      def: stats.defense ?? 0,
+      spa: stats['special-attack'] ?? 0,
+      spd: stats['special-defense'] ?? 0,
+      spe: stats.speed ?? 0,
+    },
+    abilities: pokemon.pokemonabilities.map(({ ability }) => ability.name),
+    height: pokemon.height,
+    weight: pokemon.weight,
+    generation: pokemon.pokemonspecy.generation_id,
+  };
+};
+
 /**
  * 한국어 이름 조회 함수
  */
@@ -82,39 +187,132 @@ const fetchKoreanName = async (
   )?.name;
 };
 
+const getResourceId = (url: string): number =>
+  Number(url.split('/').filter(Boolean).pop());
+
 /**
- * 진화 체인 파싱 함수
+ * 진화 체인 응답을 현재 UI가 사용하는 일렬 구조로 변환합니다.
+ * 한국어 이름과 이미지는 목록 API 캐시를 재사용하여 단계별 API 호출을 방지합니다.
  */
-const parseEvolutionChain = async (chain: any): Promise<IEvolutionDetail[]> => {
-  const result: IEvolutionDetail[] = [];
-  let current = chain;
+const transformEvolutionChain = (
+  chain: IEvolutionChainNode,
+  catalog: IPokemon[],
+  knownKoreanNames: Map<number, string | undefined>,
+): Promise<IEvolutionDetail[]> => {
+  const evolutionNodes: IEvolutionChainNode[] = [];
+  let current: IEvolutionChainNode | undefined = chain;
 
-  // 재귀 구조의 진화 체인을 순회하며 필요한 데이터 추출
   while (current) {
-    const speciesName = current.species.name;
-    // URL에서 포켓몬 고유 ID 추출
-    const id = current.species.url.split('/').filter(Boolean).pop();
-    // 각 진화 단계 포켓몬의 한국어 이름 조회
-    const krSpeciesName = await fetchKoreanName(id);
-
-    result.push({
-      species_name: speciesName.charAt(0).toUpperCase() + speciesName.slice(1),
-      kr_species_name: krSpeciesName,
-      id: Number(id),
-      // 고해상도 아트워크 이미지 URL 구성
-      image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
-    });
-    // 다음 진화 단계로 이동 (복기: 첫 번째 진화 분기만 처리)
+    evolutionNodes.push(current);
     current = current.evolves_to[0];
   }
 
-  return result;
+  return Promise.all(
+    evolutionNodes.map(async (node) => {
+      const id = getResourceId(node.species.url);
+      const catalogPokemon = catalog.find((pokemon) => pokemon.id === id);
+      const krSpeciesName =
+        catalogPokemon?.kr_name ??
+        knownKoreanNames.get(id) ??
+        (await fetchKoreanName(id));
+
+      return {
+        species_name:
+          catalogPokemon?.name ??
+          node.species.name.charAt(0).toUpperCase() +
+            node.species.name.slice(1),
+        kr_species_name: krSpeciesName,
+        id,
+        image:
+          catalogPokemon?.image ??
+          `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
+      };
+    }),
+  );
 };
 
 /**
  * 포켓몬 API
  */
 export const pokemonApi = createApiWrapper({
+  /** 필터에 필요한 1세대 목록 데이터를 GraphQL 단일 요청으로 조회 */
+  getPokemonCatalog: {
+    method: 'post',
+    execute: async (): Promise<IPokemon[]> => {
+      const response = await fetch(POKEAPI_GRAPHQL_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: POKEMON_CATALOG_QUERY,
+          variables: { limit: POKEMON_CATALOG_LIMIT },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`PokeAPI GraphQL error: ${response.status}`);
+      }
+
+      const result =
+        (await response.json()) as IPokemonCatalogGraphqlResponse;
+
+      if (result.errors?.length || !result.data) {
+        throw new Error(
+          result.errors?.map(({ message }) => message).join(', ') ||
+            'PokeAPI GraphQL response has no data.',
+        );
+      }
+
+      return result.data.pokemon.map(transformCatalogPokemon);
+    },
+  },
+
+  /**
+   * 상세 화면 최신 데이터 조회
+   * 기본 정보와 종 정보를 병렬로 받고, 진화 단계별 추가 요청은 하지 않습니다.
+   */
+  getPokemonDetail: {
+    method: 'get',
+    execute: async (
+      idOrName: string | number,
+      catalog: IPokemon[],
+    ): Promise<IPokemon> => {
+      const [pokemonData, speciesData] = await Promise.all([
+        commonApi<null, IPokemonDetailResponse>('get', {
+          url: `/pokemon/${idOrName}`,
+        }),
+        commonApi<null, IPokemonSpeciesResponse>('get', {
+          url: `/pokemon-species/${idOrName}`,
+        }),
+      ]);
+
+      const evolutionChainId = getResourceId(speciesData.evolution_chain.url);
+      const evolutionChainData = await commonApi<
+        null,
+        IEvolutionChainResponse
+      >('get', {
+        url: `/evolution-chain/${evolutionChainId}`,
+      });
+      const krName = speciesData.names.find(
+        (name) => name.language.name === 'ko',
+      )?.name;
+      const knownKoreanNames = new Map<number, string | undefined>([
+        [pokemonData.id, krName],
+      ]);
+
+      return {
+        ...transformPokemonData(pokemonData),
+        kr_name: krName,
+        evolutionChain: await transformEvolutionChain(
+          evolutionChainData.chain,
+          catalog,
+          knownKoreanNames,
+        ),
+      };
+    },
+  },
+
   /** 포켓몬 리스트 조회 */
   getPokemonList: {
     method: 'get',
@@ -225,42 +423,6 @@ export const pokemonApi = createApiWrapper({
           data.pokemon_species.length > offset + limit
             ? pageParam + 1
             : undefined,
-      };
-    },
-  },
-
-  /** 포켓몬 상세 조회 */
-  getPokemonDetail: {
-    method: 'get',
-    execute: async (idOrName: string | number): Promise<IPokemon> => {
-      const data = await commonApi<null, IPokemonDetailResponse>('get', {
-        url: `/pokemon/${idOrName}`,
-      });
-
-      const speciesData = await commonApi<null, any>('get', {
-        url: `/pokemon-species/${idOrName}`,
-      });
-
-      const krName = speciesData.names.find(
-        (n: { language: { name: string }; name: string }) =>
-          n.language.name === 'ko',
-      )?.name;
-
-      const evolutionChainId = speciesData.evolution_chain.url
-        .split('/')
-        .filter(Boolean)
-        .pop();
-      const evolutionChainData = await commonApi<null, any>('get', {
-        url: `/evolution-chain/${evolutionChainId}`,
-      });
-      const evolutionChain = await parseEvolutionChain(
-        evolutionChainData.chain,
-      );
-
-      return {
-        ...transformPokemonData(data),
-        kr_name: krName,
-        evolutionChain,
       };
     },
   },

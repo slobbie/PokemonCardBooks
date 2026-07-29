@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IPokemon } from '@/types/pokemon';
+import { IPokemon } from '@/entities/pokemon/model/types';
 import PokemonCard from '@/components/organisms/PokemonCard';
 
 /**
@@ -17,7 +17,7 @@ const PokemonGrid = ({ pokemonList, isLoading }: IProps) => {
   return (
     <motion.div
       layout
-      className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-[380px]'
+      className='grid w-full min-w-0 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-[420px]'
     >
       <AnimatePresence mode='popLayout'>
         {isLoading
@@ -27,7 +27,7 @@ const PokemonGrid = ({ pokemonList, isLoading }: IProps) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className='glass-card rounded-3xl animate-pulse bg-white/5 border border-white/10'
+                className='min-w-0 glass-card rounded-3xl animate-pulse bg-white/5 border border-white/10'
               />
             ))
           : pokemonList.map((pokemon, index) => (
@@ -38,6 +38,7 @@ const PokemonGrid = ({ pokemonList, isLoading }: IProps) => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
+                className='min-w-0'
               >
                 <PokemonCard pokemon={pokemon} />
               </motion.div>

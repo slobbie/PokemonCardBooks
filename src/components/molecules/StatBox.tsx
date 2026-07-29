@@ -12,7 +12,7 @@ interface IProps {
 
 const StatBox = ({ label, value }: IProps) => {
   return (
-    <div className='flex-1 bg-white/5 rounded p-2 text-center border border-white/5'>
+    <div className='min-w-0 flex-1 bg-white/5 rounded p-2 text-center border border-white/5'>
       <div className='text-[10px] text-gray-400'>{label}</div>
       <div className='font-bold text-sm text-white'>{value}</div>
     </div>

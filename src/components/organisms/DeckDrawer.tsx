@@ -4,12 +4,12 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trash2, ArrowRight, Activity } from 'lucide-react';
 import { useMyDeckStore } from '@/store/useMyDeckStore';
-import { IPokemon } from '@/types/pokemon';
+import { IPokemon } from '@/entities/pokemon/model/types';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { TYPE_COLORS } from '@/lib/constants';
-import { useSearchStore } from '@/store/useSearchStore';
+import { usePokemonFilterStore } from '@/features/pokemon-filter/model/pokemonFilterStore';
 import IconButton from '@/components/atoms/IconButton';
 import Button from '@/components/atoms/Button';
 
@@ -25,7 +25,7 @@ const DeckDrawer = ({ isOpen, onClose }: IProps) => {
   /** 내 덱 상태와 덱에서 제거하는 함수를 가져옴 */
   const { deck, removeFromDeck } = useMyDeckStore();
   /** 현재 UI 언어 설정을 가져옴 */
-  const { language } = useSearchStore();
+  const { language } = usePokemonFilterStore();
   /** 페이지 이동을 위한 Next.js 라우터 */
   const router = useRouter();
 
